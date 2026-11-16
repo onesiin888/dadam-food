@@ -66,7 +66,7 @@ body { font-family: 'Pretendard', sans-serif; background-color: #EDF2F7; }
 <main class="max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 flex-1 space-y-6">
     <!-- 상단 정기 주문 안내 & 예산 현황 카드 -->
     <section class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-md grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
-        <div class="md:col-span-7 flex items-center space-x-4">
+        <div id="orderGuideBox" class="md:col-span-12 flex items-center space-x-4">
             <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#0083CA]/15 to-[#159E8A]/15 text-[#0F766E] flex items-center justify-center font-black text-2xl shadow-inner shrink-0 border border-[#159E8A]/30">🚚</div>
             <div>
                 <span class="inline-block text-[11px] font-extrabold text-[#0F766E] bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-200/60 mb-1">다담랩스 정기 주문 안내</span>
@@ -74,11 +74,11 @@ body { font-family: 'Pretendard', sans-serif; background-color: #EDF2F7; }
             </div>
         </div>
 
-        <div id="budgetCardBox" class="md:col-span-5 bg-emerald-50/60 p-4 rounded-xl border border-emerald-200 shadow-2xs flex flex-col justify-center space-y-2 transition-colors duration-300">
+        <div id="budgetCardBox" class="hidden md:col-span-5 bg-emerald-50/60 p-4 rounded-xl border border-emerald-200 shadow-2xs flex flex-col justify-center space-y-2 transition-colors duration-300">
             <div class="flex justify-between items-center text-xs">
                 <span class="font-bold text-slate-600 flex items-center gap-1.5">
                     <span id="budgetStatusDot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    <span>이번 달 탕비실 예산 현황</span>
+                    <span>이번 달 탕비실 예산 현황 (관리자 전용)</span>
                 </span>
                 <div id="adminBudgetControl" class="hidden">
                     <button type="button" id="openBudgetBtn" class="text-[11px] bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-2 py-0.5 rounded font-bold transition shadow-2xs cursor-pointer">⚙️ 예산설정</button>
@@ -131,6 +131,7 @@ body { font-family: 'Pretendard', sans-serif; background-color: #EDF2F7; }
                                 <label class="block text-xs font-bold text-slate-700 mb-1.5">분류</label>
                                 <select id="category" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#0083CA] bg-slate-50/50 font-medium">
                                     <option value="과자·스낵">🍪 과자·스낵</option>
+                                    <option value="떡">🍡 떡</option>
                                     <option value="커피·음료">🥤 커피·음료</option>
                                     <option value="라면·간편식">🍜 라면·간편식</option>
                                     <option value="탕비실 소모품">🧻 탕비실 소모품</option>
@@ -138,9 +139,15 @@ body { font-family: 'Pretendard', sans-serif; background-color: #EDF2F7; }
                                 </select>
                             </div>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1.5">품목명 및 수량 <span class="text-rose-500">*</span></label>
-                            <input type="text" id="item_name" required placeholder="예: 코카콜라 제로 355ml 1박스" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#0083CA] bg-slate-50/50">
+                        <div class="grid grid-cols-12 gap-3">
+                            <div class="col-span-8">
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">품목명 <span class="text-rose-500">*</span></label>
+                                <input type="text" id="item_name" required placeholder="예: 코카콜라 제로 355ml" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#0083CA] bg-slate-50/50">
+                            </div>
+                            <div class="col-span-4">
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">수량 <span class="text-rose-500">*</span></label>
+                                <input type="text" id="item_qty" required value="1개" placeholder="예: 1박스, 2개" class="w-full text-sm px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#0083CA] bg-slate-50/50 font-bold text-slate-800">
+                            </div>
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1.5">구매 링크 (쿠팡·네이버 등 URL)</label>
@@ -171,11 +178,12 @@ body { font-family: 'Pretendard', sans-serif; background-color: #EDF2F7; }
                     </select>
                     <select id="filterCategory" class="text-xs bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 font-bold text-slate-700 focus:outline-none">
                         <option value="all">전체 분류</option>
-                        <option value="과자·스낵">과자·스낵</option>
-                        <option value="커피·음료">커피·음료</option>
-                        <option value="라면·간편식">라면·간편식</option>
-                        <option value="탕비실 소모품">탕비실 소모품</option>
-                        <option value="사무용품">사무용품</option>
+                        <option value="과자·스낵">🍪 과자·스낵</option>
+                        <option value="떡">🍡 떡</option>
+                        <option value="커피·음료">🥤 커피·음료</option>
+                        <option value="라면·간편식">🍜 라면·간편식</option>
+                        <option value="탕비실 소모품">🧻 탕비실 소모품</option>
+                        <option value="사무용품">📎 사무용품</option>
                     </select>
                 </div>
             </div>
@@ -248,21 +256,28 @@ body { font-family: 'Pretendard', sans-serif; background-color: #EDF2F7; }
 <div id="presetModal" class="fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center hidden p-4">
     <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-slate-200">
         <h3 class="text-base font-extrabold text-slate-900 mb-1">+ 자주 찾는 단골 품목 추가</h3>
-        <p class="text-xs text-slate-500 mb-4">분류, 품목명, 구매 링크를 입력하면 클릭 시 좌측 신청서에 자동 기입됩니다.</p>
+        <p class="text-xs text-slate-500 mb-4">분류, 품목명, 수량, 구매 링크를 입력하면 클릭 시 좌측 신청서에 자동 기입됩니다.</p>
         <div class="space-y-3 mb-5">
             <div>
                 <label class="block text-xs font-bold text-slate-700 mb-1">분류 선택</label>
                 <select id="presetCategoryInput" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50 font-medium">
                     <option value="과자·스낵">🍪 과자·스낵</option>
+                    <option value="떡">🍡 떡</option>
                     <option value="커피·음료">🥤 커피·음료</option>
                     <option value="라면·간편식">🍜 라면·간편식</option>
                     <option value="탕비실 소모품">🧻 탕비실 소모품</option>
                     <option value="사무용품">📎 사무용품</option>
                 </select>
             </div>
-            <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">품목명 및 수량 <span class="text-rose-500">*</span></label>
-                <input type="text" id="presetNameInput" placeholder="예: 코카콜라 제로 355ml (24캔)" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-300">
+            <div class="grid grid-cols-12 gap-2.5">
+                <div class="col-span-8">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">품목명 <span class="text-rose-500">*</span></label>
+                    <input type="text" id="presetNameInput" placeholder="예: 코카콜라 제로 355ml" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-300">
+                </div>
+                <div class="col-span-4">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">기본 수량</label>
+                    <input type="text" id="presetQtyInput" value="1박스" placeholder="예: 24캔, 1박스" class="w-full text-sm px-3 py-2.5 rounded-xl border border-slate-300 font-bold">
+                </div>
             </div>
             <div>
                 <label class="block text-xs font-bold text-slate-700 mb-1">구매 링크 (URL, 선택)</label>
@@ -314,12 +329,13 @@ function encodePwd(str) {
 var state = {
     orders: [],
     presets: [
-        { name: "코카콜라 제로 355ml (24캔)", category: "커피·음료", link: "" },
-        { name: "카누 미니 다크로스트 (100T)", category: "커피·음료", link: "" },
-        { name: "오리온 비초비 (3박스)", category: "과자·스낵", link: "" },
-        { name: "무항생제 구운란 (30구)", category: "라면·간편식", link: "" },
-        { name: "종이컵 6.5온스 (1박스)", category: "탕비실 소모품", link: "" },
-        { name: "두툼한 물티슈 (10팩)", category: "탕비실 소모품", link: "" }
+        { name: "코카콜라 제로 355ml", qty: "24캔 (1박스)", category: "커피·음료", link: "" },
+        { name: "카누 미니 다크로스트", qty: "100T", category: "커피·음료", link: "" },
+        { name: "오리온 비초비", qty: "3박스", category: "과자·스낵", link: "" },
+        { name: "굳지않는 앙금절편 / 찹쌀떡", qty: "1박스", category: "떡", link: "" },
+        { name: "무항생제 구운란", qty: "30구", category: "라면·간편식", link: "" },
+        { name: "종이컵 6.5온스", qty: "1박스", category: "탕비실 소모품", link: "" },
+        { name: "두툼한 물티슈", qty: "10팩", category: "탕비실 소모품", link: "" }
     ],
     totalBudget: 700000,
     notice: "먹고 싶은 간식이나 필요한 비품을 등록하거나 '나도 원해요'를 눌러주세요. (매주 화·목 정기 발주)",
@@ -342,6 +358,9 @@ function showToast(msg) {
 // 카테고리 및 키워드별 스마트 썸네일 정보 반환
 function getSmartThumbnail(name, category) {
     var n = (name || "").toLowerCase();
+    if (category === "떡" || n.indexOf("떡") !== -1 || n.indexOf("절편") !== -1 || n.indexOf("백설기") !== -1 || n.indexOf("인절미") !== -1 || n.indexOf("약과") !== -1) {
+        return { emoji: "🍡", label: "떡", bg: "bg-pink-50 text-pink-700 border-pink-200" };
+    }
     if (category === "커피·음료" || n.indexOf("콜라") !== -1 || n.indexOf("사이다") !== -1 || n.indexOf("커피") !== -1 || n.indexOf("음료") !== -1 || n.indexOf("차") !== -1 || n.indexOf("우유") !== -1 || n.indexOf("주스") !== -1) {
         return { emoji: "🥤", label: "음료", bg: "bg-sky-50 text-sky-700 border-sky-200" };
     }
@@ -449,19 +468,20 @@ function updateBudgetColors(balance, pct) {
     var statusDot = document.getElementById("budgetStatusDot");
     var balanceEl = document.getElementById("balanceDisplay");
     var progressBar = document.getElementById("budgetProgressBar");
+    var hiddenCls = isAdmin ? "" : "hidden ";
 
     if (balance <= 0 || pct <= 20) {
-        cardBox.className = "md:col-span-5 bg-rose-50/80 p-4 rounded-xl border border-rose-300 shadow-2xs flex flex-col justify-center space-y-2 transition-colors duration-300";
+        cardBox.className = hiddenCls + "md:col-span-5 bg-rose-50/80 p-4 rounded-xl border border-rose-300 shadow-2xs flex flex-col justify-center space-y-2 transition-colors duration-300";
         statusDot.className = "w-2 h-2 rounded-full bg-rose-500 animate-ping";
         balanceEl.className = "text-xs sm:text-sm font-extrabold px-2.5 py-1 rounded-lg bg-rose-600 text-white border border-rose-700 shadow-xs transition-colors duration-300";
         progressBar.className = "bg-rose-500 h-2.5 rounded-full transition-all duration-500";
     } else if (pct <= 50) {
-        cardBox.className = "md:col-span-5 bg-amber-50/80 p-4 rounded-xl border border-amber-300 shadow-2xs flex flex-col justify-center space-y-2 transition-colors duration-300";
+        cardBox.className = hiddenCls + "md:col-span-5 bg-amber-50/80 p-4 rounded-xl border border-amber-300 shadow-2xs flex flex-col justify-center space-y-2 transition-colors duration-300";
         statusDot.className = "w-2 h-2 rounded-full bg-amber-500";
         balanceEl.className = "text-xs sm:text-sm font-extrabold px-2.5 py-1 rounded-lg bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs transition-colors duration-300";
         progressBar.className = "bg-amber-500 h-2.5 rounded-full transition-all duration-500";
     } else {
-        cardBox.className = "md:col-span-5 bg-emerald-50/60 p-4 rounded-xl border border-emerald-200 shadow-2xs flex flex-col justify-center space-y-2 transition-colors duration-300";
+        cardBox.className = hiddenCls + "md:col-span-5 bg-emerald-50/60 p-4 rounded-xl border border-emerald-200 shadow-2xs flex flex-col justify-center space-y-2 transition-colors duration-300";
         statusDot.className = "w-2 h-2 rounded-full bg-emerald-500";
         balanceEl.className = "text-xs sm:text-sm font-extrabold px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-2xs transition-colors duration-300";
         progressBar.className = "bg-emerald-500 h-2.5 rounded-full transition-all duration-500";
@@ -474,6 +494,7 @@ function renderAll() {
     var settingsBtn = document.getElementById("settingsBtn");
     var presetCtrl = document.getElementById("adminPresetControl");
     var budgetCtrl = document.getElementById("adminBudgetControl");
+    var guideBox = document.getElementById("orderGuideBox");
 
     if (isAdmin) {
         adminBtn.innerText = "🔓 담당자 모드 종료";
@@ -481,12 +502,14 @@ function renderAll() {
         settingsBtn.classList.remove("hidden");
         presetCtrl.classList.remove("hidden");
         budgetCtrl.classList.remove("hidden");
+        guideBox.className = "md:col-span-7 flex items-center space-x-4";
     } else {
         adminBtn.innerText = "🔒 담당자 로그인";
         adminBtn.className = "text-xs bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 rounded-xl font-bold shadow-md cursor-pointer";
         settingsBtn.classList.add("hidden");
         presetCtrl.classList.add("hidden");
         budgetCtrl.classList.add("hidden");
+        guideBox.className = "md:col-span-12 flex items-center space-x-4";
     }
 
     var total = Number(state.totalBudget) || 700000;
@@ -510,14 +533,16 @@ function renderAll() {
         b.type = "button";
         b.className = "text-xs text-slate-700 hover:text-teal-800 px-3 py-2 font-bold cursor-pointer flex items-center gap-1.5";
         var thumbInfo = getSmartThumbnail(p.name, p.category);
+        var qtyBadge = p.qty ? '<span class="text-[10px] text-slate-600 bg-slate-200/80 px-1.5 py-0.5 rounded font-bold">' + p.qty + '</span>' : '';
         var linkBadge = (p.link && p.link.indexOf("http") === 0) ? '<span class="text-[10px] text-[#0083CA] bg-blue-50 px-1.5 py-0.5 rounded font-extrabold">🔗링크</span>' : '';
-        b.innerHTML = '<span>' + thumbInfo.emoji + '</span><span>' + p.name + '</span>' + linkBadge;
+        b.innerHTML = '<span>' + thumbInfo.emoji + '</span><span>' + p.name + '</span>' + qtyBadge + linkBadge;
         b.onclick = function() {
             document.getElementById("category").value = p.category || "과자·스낵";
             document.getElementById("item_name").value = p.name;
+            document.getElementById("item_qty").value = p.qty || "1개";
             document.getElementById("link").value = p.link || "";
             document.getElementById("item_name").focus();
-            showToast("'" + p.name + "' 정보(분류·품목·링크)가 자동 입력되었습니다.");
+            showToast("'" + p.name + "' 정보(분류·품목·수량·링크)가 자동 입력되었습니다.");
         };
         wrapper.appendChild(b);
 
@@ -591,14 +616,21 @@ function renderAll() {
 
         var infoDiv = document.createElement("div");
         infoDiv.className = "space-y-1 flex-1 min-w-0";
+        var qtyChip = o.qty ? '<span class="inline-flex items-center text-xs font-extrabold bg-[#0083CA]/10 text-[#0083CA] border border-[#0083CA]/25 px-2.5 py-0.5 rounded-lg shrink-0">수량: ' + o.qty + '</span>' : '';
+        var reqNoteBox = o.reqNote ? '<div class="mt-2 flex items-start gap-2 bg-amber-50/90 border border-amber-200/90 text-amber-950 px-3.5 py-2.5 rounded-xl text-xs font-bold shadow-2xs"><span class="shrink-0 text-sm leading-none mt-0.5">📝</span><div class="leading-relaxed"><span class="text-amber-700 font-extrabold mr-1.5">[신청 메모]</span>' + o.reqNote + '</div></div>' : '';
+        var adminPriceBox = (isAdmin && o.price > 0) ? '<div class="mt-2 text-xs font-bold bg-slate-100 text-slate-800 px-3 py-1.5 rounded-xl border border-slate-200 inline-block">💳 결제 완료 금액: <span class="text-[#0083CA] font-extrabold">' + Number(o.price).toLocaleString() + '원</span></div>' : '';
+
         infoDiv.innerHTML = '<div class="flex flex-wrap items-center gap-1.5">'
             + '<span class="text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-md border border-slate-200">' + o.category + '</span>'
             + '<span class="text-xs font-semibold text-slate-400">· ' + o.author + ' (' + (o.date || "오늘") + ')</span>'
             + '</div>'
-            + '<div class="text-base font-extrabold text-slate-900 pt-0.5 break-words">' + o.name + '</div>'
-            + (o.reqNote ? '<div class="text-xs font-medium text-slate-500">' + o.reqNote + '</div>' : '')
-            + (o.adminMemo ? '<div class="mt-2.5 text-xs font-bold bg-[#159E8A]/10 text-[#0F766E] px-3.5 py-2.5 rounded-xl border border-[#159E8A]/25">📢 담당자 안내: ' + o.adminMemo + '</div>' : '')
-            + (o.price > 0 ? '<div class="mt-2 text-xs font-bold bg-slate-100 text-slate-800 px-3 py-1.5 rounded-xl border border-slate-200 inline-block">💳 결제 완료 금액: <span class="text-[#0083CA] font-extrabold">' + Number(o.price).toLocaleString() + '원</span></div>' : '');
+            + '<div class="flex flex-wrap items-center gap-2 pt-0.5">'
+            + '<span class="text-base font-extrabold text-slate-900 break-words">' + o.name + '</span>'
+            + qtyChip
+            + '</div>'
+            + reqNoteBox
+            + (o.adminMemo ? '<div class="mt-2 text-xs font-bold bg-[#159E8A]/10 text-[#0F766E] px-3.5 py-2.5 rounded-xl border border-[#159E8A]/25">📢 담당자 안내: ' + o.adminMemo + '</div>' : '')
+            + adminPriceBox;
 
         leftWrap.appendChild(thumbBox);
         leftWrap.appendChild(infoDiv);
@@ -675,7 +707,7 @@ function renderAll() {
                     showToast("이미 단골 품목에 등록되어 있습니다.");
                     return;
                 }
-                state.presets.push({ name: o.name, category: o.category, link: o.link || "" });
+                state.presets.push({ name: o.name, qty: o.qty || "1개", category: o.category, link: o.link || "" });
                 renderAll();
                 saveToCloud();
                 showToast("단골 품목으로 등록되었습니다.");
@@ -745,12 +777,14 @@ document.getElementById("adminPasswordInput").onkeydown = function(e) {
 document.getElementById("orderForm").onsubmit = function(e) {
     e.preventDefault();
     var name = document.getElementById("item_name").value.trim();
+    var qty = document.getElementById("item_qty").value.trim() || "1개";
     if (!name) return;
     var item = {
         id: Date.now(),
         author: document.getElementById("author").value.trim() || "익명",
         category: document.getElementById("category").value,
         name: name,
+        qty: qty,
         link: document.getElementById("link").value.trim(),
         reqNote: document.getElementById("req_note").value.trim(),
         likes: 1,
@@ -763,6 +797,7 @@ document.getElementById("orderForm").onsubmit = function(e) {
     state.orders.unshift(item);
     myLikes.push(item.id);
     document.getElementById("item_name").value = "";
+    document.getElementById("item_qty").value = "1개";
     document.getElementById("link").value = "";
     document.getElementById("req_note").value = "";
     renderAll();
@@ -819,6 +854,7 @@ document.getElementById("saveMemoBtn").onclick = function() {
 document.getElementById("openAddPresetBtn").onclick = function() {
     document.getElementById("presetCategoryInput").value = document.getElementById("category").value || "과자·스낵";
     document.getElementById("presetNameInput").value = "";
+    document.getElementById("presetQtyInput").value = "1박스";
     document.getElementById("presetLinkInput").value = "";
     document.getElementById("presetModal").classList.remove("hidden");
     document.getElementById("presetNameInput").focus();
@@ -828,6 +864,7 @@ document.getElementById("closePresetBtn").onclick = function() {
 };
 document.getElementById("savePresetBtn").onclick = function() {
     var nameVal = document.getElementById("presetNameInput").value.trim();
+    var qtyVal = document.getElementById("presetQtyInput").value.trim() || "1개";
     if (!nameVal) {
         showToast("품목명을 입력해주세요.");
         return;
@@ -836,6 +873,7 @@ document.getElementById("savePresetBtn").onclick = function() {
     var linkVal = document.getElementById("presetLinkInput").value.trim();
     state.presets.push({
         name: nameVal,
+        qty: qtyVal,
         category: catVal,
         link: linkVal
     });
