@@ -409,194 +409,54 @@ function showToast(msg) {
     setTimeout(function() { el.remove(); }, 2200);
 }
 
-// 품목명과 분류에 맞춰 토스 3D 아이콘 감성의 고디테일 입체 패키지 일러스트 생성
-function getProductIllustration(name, category) {
-    var n = String(name || "").toLowerCase();
-
-    // 1. 코카콜라 제로 / 탄산음료 (입체 캔 + 6팩 박스 + 시그니처 웨이브 & 물방울 디테일)
-    if (n.indexOf("콜라") !== -1 || n.indexOf("사이다") !== -1 || n.indexOf("탄산") !== -1 || n.indexOf("제로") !== -1 || n.indexOf("펩시") !== -1) {
+// 품목명과 무관하게 선택한 '분류(Category)' 기준으로만 통일된 토스 스타일 아이콘 & 파스텔 컬러 반환
+function getCategoryVisual(category) {
+    if (category === "떡") {
         return {
-            bg: "bg-gradient-to-br from-[#FFE4E6] to-[#FECDD3]",
-            svg: '<svg class="w-16 h-16 drop-shadow-sm" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">'
-                + '<defs>'
-                + '<linearGradient id="cokeBox" x1="12" y1="36" x2="72" y2="82" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FB7185"/><stop offset="35%" stop-color="#E11D48"/><stop offset="100%" stop-color="#9F1239"/></linearGradient>'
-                + '<linearGradient id="cokeCan" x1="48" y1="14" x2="80" y2="76" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#F43F5E"/><stop offset="45%" stop-color="#E11D48"/><stop offset="100%" stop-color="#881337"/></linearGradient>'
-                + '<linearGradient id="canTop" x1="50" y1="14" x2="78" y2="14" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#F1F5F9"/><stop offset="50%" stop-color="#94A3B8"/><stop offset="100%" stop-color="#E2E8F0"/></linearGradient>'
-                + '</defs>'
-                + '<ellipse cx="48" cy="83" rx="34" ry="5" fill="#881337" opacity="0.2"/>'
-                + '<rect x="12" y="34" width="50" height="44" rx="9" fill="url(#cokeBox)"/>'
-                + '<path d="M12 45C24 45 28 38 42 38C52 38 56 42 62 42V50C54 50 50 45 40 45C26 45 22 52 12 52V45Z" fill="#FFFFFF" opacity="0.9"/>'
-                + '<rect x="17" y="54" width="32" height="13" rx="4" fill="#18181B"/>'
-                + '<text x="33" y="63.5" text-anchor="middle" fill="#FFFFFF" font-size="8.5" font-weight="900" letter-spacing="0.5" font-family="Pretendard, sans-serif">ZERO</text>'
-                + '<rect x="50" y="18" width="32" height="62" rx="10" fill="url(#cokeCan)" stroke="#FFFFFF" stroke-width="1.5"/>'
-                + '<ellipse cx="66" cy="19" rx="14" ry="4" fill="url(#canTop)"/>'
-                + '<ellipse cx="66" cy="19" rx="9" ry="2" fill="#64748B"/>'
-                + '<rect x="50" y="33" width="32" height="15" fill="#18181B"/>'
-                + '<text x="66" y="43" text-anchor="middle" fill="#FFFFFF" font-size="8" font-weight="900" font-style="italic" font-family="Pretendard, sans-serif">Coca</text>'
-                + '<text x="66" y="57" text-anchor="middle" fill="#FDE047" font-size="7.5" font-weight="900" font-family="Pretendard, sans-serif">ZERO</text>'
-                + '<path d="M50 63C58 66 64 59 72 62C76 63.5 79 65 82 64V68C78 69 75 67.5 71 66C63 63 58 70 50 67V63Z" fill="#FFFFFF" opacity="0.95"/>'
-                + '<rect x="54" y="23" width="3.5" height="50" rx="1.75" fill="#FFFFFF" opacity="0.35"/>'
-                + '<circle cx="75" cy="29" r="1.8" fill="#FFFFFF" opacity="0.7"/>'
-                + '<circle cx="77" cy="52" r="1.5" fill="#FFFFFF" opacity="0.7"/>'
-                + '</svg>'
+            emoji: "🍡",
+            label: "떡",
+            bg: "bg-gradient-to-br from-[#FCE7F3] to-[#FBCFE8]",
+            badgeBg: "bg-pink-100/80 text-pink-800"
         };
     }
-
-    // 2. 카누 / 커피 / 아메리카노 (고급 다크로스트 패키지 + 스틱 + 김이 모락모락 나는 머그컵)
-    if (n.indexOf("카누") !== -1 || n.indexOf("커피") !== -1 || n.indexOf("아메리카노") !== -1 || n.indexOf("캡슐") !== -1 || n.indexOf("믹스") !== -1) {
+    if (category === "커피·음료") {
         return {
-            bg: "bg-gradient-to-br from-[#F5EBE6] to-[#E6D5C9]",
-            svg: '<svg class="w-16 h-16 drop-shadow-sm" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">'
-                + '<defs>'
-                + '<linearGradient id="kanuBox" x1="16" y1="14" x2="56" y2="80" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3F3F46"/><stop offset="50%" stop-color="#18181B"/><stop offset="100%" stop-color="#09090B"/></linearGradient>'
-                + '<linearGradient id="coffeeCup" x1="48" y1="42" x2="82" y2="82" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#E2E8F0"/></linearGradient>'
-                + '</defs>'
-                + '<ellipse cx="48" cy="83" rx="34" ry="5" fill="#27272A" opacity="0.18"/>'
-                + '<rect x="15" y="15" width="44" height="64" rx="8" fill="url(#kanuBox)"/>'
-                + '<rect x="19" y="19" width="3" height="56" rx="1.5" fill="#FFFFFF" opacity="0.12"/>'
-                + '<rect x="21" y="25" width="32" height="18" rx="4" fill="#B45309"/>'
-                + '<rect x="21" y="25" width="32" height="18" rx="4" stroke="#F59E0B" stroke-width="1" opacity="0.6"/>'
-                + '<text x="37" y="37" text-anchor="middle" fill="#FEF3C7" font-size="9.5" font-weight="900" letter-spacing="1" font-family="Pretendard, sans-serif">KANU</text>'
-                + '<text x="37" y="53" text-anchor="middle" fill="#A1A1AA" font-size="6.5" font-weight="800" font-family="Pretendard, sans-serif">DARK ROAST</text>'
-                + '<rect x="27" y="60" width="20" height="8" rx="4" fill="#DC2626"/>'
-                + '<text x="37" y="66" text-anchor="middle" fill="#FFFFFF" font-size="6" font-weight="900">100T</text>'
-                + '<path d="M72 48H80C83.866 48 87 51.134 87 55C87 58.866 83.866 62 80 62H72" stroke="#CBD5E1" stroke-width="5" stroke-linecap="round"/>'
-                + '<path d="M46 42H78V62C78 71.9411 69.9411 80 60 80H64C54.0589 80 46 71.9411 46 62V42Z" fill="url(#coffeeCup)"/>'
-                + '<ellipse cx="62" cy="42" rx="16" ry="5" fill="#F8FAFC"/>'
-                + '<ellipse cx="62" cy="42.5" rx="13" ry="3.5" fill="#451A03"/>'
-                + '<ellipse cx="59" cy="41.8" rx="6" ry="1.5" fill="#92400E" opacity="0.7"/>'
-                + '<path d="M57 32C57 29 60 28 60 25" stroke="#A8A29E" stroke-width="2.2" stroke-linecap="round"/>'
-                + '<path d="M66 34C66 31 69 30 69 27" stroke="#A8A29E" stroke-width="2.2" stroke-linecap="round"/>'
-                + '</svg>'
-        };
-    }
-
-    // 3. 비초비 / 쿠키 / 초코 과자 (통초콜릿이 샌드된 바삭한 비스킷 + 패키지 박스)
-    if (n.indexOf("비초비") !== -1 || n.indexOf("비츠비") !== -1 || n.indexOf("초코") !== -1 || n.indexOf("쿠키") !== -1 || n.indexOf("과자") !== -1) {
-        return {
-            bg: "bg-gradient-to-br from-[#FEF3C7] to-[#FDE68A]",
-            svg: '<svg class="w-16 h-16 drop-shadow-sm" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">'
-                + '<defs>'
-                + '<linearGradient id="biscuitGrad" x1="36" y1="36" x2="84" y2="80" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FBBF24"/><stop offset="55%" stop-color="#D97706"/><stop offset="100%" stop-color="#B45309"/></linearGradient>'
-                + '<linearGradient id="boxGrad" x1="12" y1="18" x2="64" y2="66" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#EA580C"/><stop offset="100%" stop-color="#9A3412"/></linearGradient>'
-                + '</defs>'
-                + '<ellipse cx="48" cy="83" rx="35" ry="5" fill="#78350F" opacity="0.18"/>'
-                + '<rect x="12" y="18" width="54" height="46" rx="9" fill="url(#boxGrad)"/>'
-                + '<rect x="16" y="22" width="46" height="38" rx="6" fill="#FFFBEB"/>'
-                + '<rect x="20" y="26" width="24" height="11" rx="3.5" fill="#DC2626"/>'
-                + '<text x="32" y="34" text-anchor="middle" fill="#FFFFFF" font-size="7.5" font-weight="900" font-family="Pretendard, sans-serif">비초비</text>'
-                + '<rect x="44" y="44" width="38" height="30" rx="7" fill="#3B190B" transform="rotate(-6 44 44)"/>'
-                + '<rect x="40" y="38" width="42" height="32" rx="8" fill="url(#biscuitGrad)" stroke="#FDE68A" stroke-width="1.5" transform="rotate(-6 40 38)"/>'
-                + '<circle cx="51" cy="48" r="2" fill="#78350F"/><circle cx="61" cy="47" r="2" fill="#78350F"/><circle cx="71" cy="46" r="2" fill="#78350F"/>'
-                + '<circle cx="52" cy="58" r="2" fill="#78350F"/><circle cx="62" cy="57" r="2" fill="#78350F"/><circle cx="72" cy="56" r="2" fill="#78350F"/>'
-                + '<path d="M54 68L78 65L76 74L52 76Z" fill="#451A03"/>'
-                + '</svg>'
-        };
-    }
-
-    // 4. 구운란 / 계란 30구 (입체 계란판 트레이 + 윤기 나는 구운 계란들)
-    if (n.indexOf("구운란") !== -1 || n.indexOf("계란") !== -1 || n.indexOf("달걀") !== -1 || n.indexOf("훈제란") !== -1) {
-        return {
-            bg: "bg-gradient-to-br from-[#FFEDD5] to-[#FED7AA]",
-            svg: '<svg class="w-16 h-16 drop-shadow-sm" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">'
-                + '<defs>'
-                + '<radialGradient id="eggGrad1" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#FCD34D"/><stop offset="45%" stop-color="#D97706"/><stop offset="100%" stop-color="#78350F"/></radialGradient>'
-                + '<radialGradient id="eggGrad2" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#FBBF24"/><stop offset="50%" stop-color="#B45309"/><stop offset="100%" stop-color="#451A03"/></radialGradient>'
-                + '</defs>'
-                + '<ellipse cx="48" cy="81" rx="36" ry="5" fill="#78350F" opacity="0.18"/>'
-                + '<ellipse cx="29" cy="36" rx="11" ry="14" fill="url(#eggGrad2)"/>'
-                + '<ellipse cx="48" cy="33" rx="11" ry="14" fill="url(#eggGrad1)"/>'
-                + '<ellipse cx="67" cy="36" rx="11" ry="14" fill="url(#eggGrad2)"/>'
-                + '<ellipse cx="24" cy="48" rx="12.5" ry="16" fill="url(#eggGrad1)"/>'
-                + '<ellipse cx="48" cy="46" rx="13" ry="16.5" fill="url(#eggGrad2)"/>'
-                + '<ellipse cx="72" cy="48" rx="12.5" ry="16" fill="url(#eggGrad1)"/>'
-                + '<ellipse cx="20" cy="42" rx="3.5" ry="5" fill="#FFFFFF" opacity="0.45" transform="rotate(-15 20 42)"/>'
-                + '<ellipse cx="44" cy="39" rx="4" ry="5.5" fill="#FFFFFF" opacity="0.5" transform="rotate(-15 44 39)"/>'
-                + '<ellipse cx="68" cy="42" rx="3.5" ry="5" fill="#FFFFFF" opacity="0.45" transform="rotate(-15 68 42)"/>'
-                + '<path d="M10 52L16 76H80L86 52C78 57 70 57 64 52C56 57 40 57 32 52C26 57 18 57 10 52Z" fill="#D6D3D1" stroke="#A8A29E" stroke-width="1.5"/>'
-                + '<rect x="30" y="60" width="36" height="11" rx="4" fill="#78350F"/>'
-                + '<text x="48" y="68" text-anchor="middle" fill="#FEF3C7" font-size="7.5" font-weight="900" font-family="Pretendard, sans-serif">구운란 30구</text>'
-                + '</svg>'
-        };
-    }
-
-    // 5. 떡 / 앙금절편 / 찹쌀떡 (윤기 나는 삼색 앙금절편 & 쫀득한 찹쌀떡 트레이)
-    if (category === "떡" || n.indexOf("떡") !== -1 || n.indexOf("절편") !== -1 || n.indexOf("약과") !== -1) {
-        return {
-            bg: "bg-gradient-to-br from-[#DCFCE7] to-[#BBF7D0]",
-            svg: '<svg class="w-16 h-16 drop-shadow-sm" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">'
-                + '<ellipse cx="48" cy="80" rx="36" ry="6" fill="#065F46" opacity="0.15"/>'
-                + '<ellipse cx="48" cy="64" rx="38" ry="15" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>'
-                + '<rect x="20" y="42" width="26" height="18" rx="9" fill="#F472B6" stroke="#DB2777" stroke-width="1.5"/>'
-                + '<ellipse cx="29" cy="47" rx="5" ry="2.2" fill="#FFFFFF" opacity="0.6"/>'
-                + '<rect x="46" y="44" width="28" height="18" rx="9" fill="#4ADE80" stroke="#16A34A" stroke-width="1.5"/>'
-                + '<ellipse cx="56" cy="49" rx="5" ry="2.2" fill="#FFFFFF" opacity="0.6"/>'
-                + '<rect x="31" y="30" width="30" height="19" rx="9.5" fill="#FFFBEB" stroke="#D6D3D1" stroke-width="1.5"/>'
-                + '<ellipse cx="42" cy="35" rx="6" ry="2.5" fill="#FFFFFF" opacity="0.9"/>'
-                + '<circle cx="46" cy="39" r="2" fill="#15803D" opacity="0.5"/><circle cx="52" cy="39" r="2" fill="#BE185D" opacity="0.5"/><circle cx="40" cy="39" r="2" fill="#B45309" opacity="0.5"/>'
-                + '</svg>'
-        };
-    }
-
-    // 6. 물티슈 / 휴지 / 종이컵 소모품 (입체 캡 물티슈 팩 & 뽑아쓰는 티슈)
-    if (category === "탕비실 소모품" || n.indexOf("티슈") !== -1 || n.indexOf("휴지") !== -1 || n.indexOf("종이컵") !== -1) {
-        return {
+            emoji: "🥤",
+            label: "커피·음료",
             bg: "bg-gradient-to-br from-[#E0F2FE] to-[#BAE6FD]",
-            svg: '<svg class="w-16 h-16 drop-shadow-sm" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">'
-                + '<ellipse cx="48" cy="80" rx="34" ry="5" fill="#0369A1" opacity="0.15"/>'
-                + '<rect x="14" y="34" width="68" height="42" rx="14" fill="#FFFFFF" stroke="#7DD3FC" stroke-width="2"/>'
-                + '<path d="M14 54C30 48 66 48 82 54V62C82 69.732 75.732 76 68 76H28C20.268 76 14 69.732 14 62V54Z" fill="#0284C7"/>'
-                + '<path d="M36 34C34 20 44 13 50 18C55 22 62 15 60 34H36Z" fill="#E0F2FE" stroke="#38BDF8" stroke-width="1.5"/>'
-                + '<rect x="28" y="30" width="40" height="14" rx="7" fill="#0EA5E9"/>'
-                + '<rect x="33" y="33" width="30" height="8" rx="4" fill="#38BDF8"/>'
-                + '<text x="48" y="67" text-anchor="middle" fill="#FFFFFF" font-size="8.5" font-weight="900" font-family="Pretendard, sans-serif">PURE WIPES</text>'
-                + '</svg>'
+            badgeBg: "bg-sky-100/80 text-sky-800"
         };
     }
-
-    // 7. 라면 / 컵라면 / 간편식 (입체 컵라면 용기 + 면발 + 계란 고명)
-    if (category === "라면·간편식" || n.indexOf("라면") !== -1 || n.indexOf("컵밥") !== -1 || n.indexOf("햇반") !== -1) {
+    if (category === "라면·간편식") {
         return {
+            emoji: "🍜",
+            label: "라면·간편식",
             bg: "bg-gradient-to-br from-[#FEF3C7] to-[#FDE68A]",
-            svg: '<svg class="w-16 h-16 drop-shadow-sm" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">'
-                + '<ellipse cx="48" cy="82" rx="30" ry="5" fill="#991B1B" opacity="0.18"/>'
-                + '<path d="M20 30H76L68 78H28L20 30Z" fill="#DC2626"/>'
-                + '<path d="M22 42H74L72 55H24L22 42Z" fill="#18181B"/>'
-                + '<text x="48" y="51.5" text-anchor="middle" fill="#FBBF24" font-size="9" font-weight="900" font-family="Pretendard, sans-serif">RAMEN</text>'
-                + '<ellipse cx="48" cy="30" rx="29" ry="7" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>'
-                + '<path d="M32 30C35 26 39 33 43 29C47 25 51 33 55 29C59 25 62 32 65 29" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>'
-                + '<circle cx="54" cy="28" r="5" fill="#FFFFFF"/><circle cx="54" cy="28" r="2.5" fill="#EA580C"/>'
-                + '</svg>'
+            badgeBg: "bg-amber-100/80 text-amber-800"
         };
     }
-
-    // 8. 사무용품 (입체 스프링 노트 + 형광 포스트잇 + 볼펜)
+    if (category === "탕비실 소모품") {
+        return {
+            emoji: "🧻",
+            label: "탕비실 소모품",
+            bg: "bg-gradient-to-br from-[#CCFBF1] to-[#99F6E4]",
+            badgeBg: "bg-teal-100/80 text-teal-800"
+        };
+    }
     if (category === "사무용품") {
         return {
+            emoji: "📎",
+            label: "사무용품",
             bg: "bg-gradient-to-br from-[#F3E8FF] to-[#E9D5FF]",
-            svg: '<svg class="w-16 h-16 drop-shadow-sm" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">'
-                + '<ellipse cx="48" cy="82" rx="32" ry="5" fill="#581C87" opacity="0.15"/>'
-                + '<rect x="20" y="18" width="44" height="58" rx="7" fill="#7E22CE"/>'
-                + '<rect x="25" y="18" width="39" height="58" rx="6" fill="#9333EA"/>'
-                + '<rect x="31" y="28" width="26" height="12" rx="3" fill="#FEF08A"/>'
-                + '<rect x="46" y="44" width="28" height="28" rx="4" fill="#FDE047" stroke="#EAB308" stroke-width="1.5" transform="rotate(6 46 44)"/>'
-                + '<path d="M62 18L78 34L48 64L38 66L40 56L62 18Z" fill="#38BDF8" stroke="#0284C7" stroke-width="1.5"/>'
-                + '</svg>'
+            badgeBg: "bg-purple-100/80 text-purple-800"
         };
     }
-
-    // 기본 과자·스낵 (입체 초코칩 쿠키 & 감자칩 봉지)
+    // 기본: 과자·스낵
     return {
+        emoji: "🍪",
+        label: "과자·스낵",
         bg: "bg-gradient-to-br from-[#FFE4E6] to-[#FECDD3]",
-        svg: '<svg class="w-16 h-16 drop-shadow-sm" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">'
-            + '<radialGradient id="cookie3d" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#FCD34D"/><stop offset="55%" stop-color="#D97706"/><stop offset="100%" stop-color="#78350F"/></radialGradient>'
-            + '<ellipse cx="48" cy="81" rx="30" ry="5" fill="#78350F" opacity="0.2"/>'
-            + '<circle cx="48" cy="48" r="28" fill="url(#cookie3d)"/>'
-            + '<circle cx="38" cy="37" r="4.5" fill="#3B190B"/><circle cx="57" cy="39" r="3.8" fill="#3B190B"/>'
-            + '<circle cx="44" cy="54" r="4.5" fill="#3B190B"/><circle cx="60" cy="55" r="3.5" fill="#3B190B"/>'
-            + '<circle cx="33" cy="51" r="3.2" fill="#3B190B"/><circle cx="49" cy="43" r="2.5" fill="#3B190B"/>'
-            + '<circle cx="36" cy="35" r="1.2" fill="#FFFFFF" opacity="0.4"/><circle cx="42" cy="52" r="1.2" fill="#FFFFFF" opacity="0.4"/>'
-            + '</svg>'
+        badgeBg: "bg-rose-100/80 text-rose-800"
     };
 }
 
@@ -753,17 +613,18 @@ function renderAll() {
     document.getElementById("budgetProgressBar").style.width = pct + "%";
     updateBudgetColors(balance, pct);
 
-    // 시안과 동일한 파스텔 정사각형 아이콘 타일 렌더링
+    // 분류(Category) 기준의 깔끔한 파스텔 아이콘 타일 렌더링
     var presetBox = document.getElementById("presetContainer");
     presetBox.innerHTML = "";
     state.presets.forEach(function(p, idx) {
-        var illust = getProductIllustration(p.name, p.category);
+        var visual = getCategoryVisual(p.category);
         var tile = document.createElement("div");
-        tile.className = "relative group rounded-2xl p-3 flex flex-col items-center justify-center text-center transition transform hover:-translate-y-1 cursor-pointer select-none " + illust.bg;
+        tile.className = "relative group rounded-2xl p-3.5 flex flex-col items-center justify-center text-center transition transform hover:-translate-y-1 cursor-pointer select-none shadow-2xs " + visual.bg;
 
-        tile.innerHTML = '<div class="mb-1.5 drop-shadow-xs">' + illust.svg + '</div>'
+        tile.innerHTML = '<div class="w-12 h-12 rounded-2xl bg-white/80 shadow-2xs flex items-center justify-center text-2xl mb-2">' + visual.emoji + '</div>'
+            + '<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-md mb-1 ' + visual.badgeBg + '">' + visual.label + '</span>'
             + '<div class="text-xs font-black text-slate-900 leading-tight line-clamp-2 break-keep">' + p.name + '</div>'
-            + (p.qty ? '<span class="mt-1 text-[10px] font-extrabold text-slate-600 bg-white/70 px-2 py-0.5 rounded-full">' + p.qty + '</span>' : '');
+            + (p.qty ? '<span class="mt-1.5 text-[10px] font-extrabold text-slate-700 bg-white/80 px-2.5 py-0.5 rounded-full">' + p.qty + '</span>' : '');
 
         tile.onclick = function() {
             document.getElementById("category").value = p.category || "과자·스낵";
@@ -815,7 +676,7 @@ function renderAll() {
 
     list.forEach(function(o) {
         var liked = myLikes.indexOf(o.id) !== -1;
-        var illust = getProductIllustration(o.name, o.category);
+        var visual = getCategoryVisual(o.category);
         var displayDateTime = (o.date && o.date.indexOf(":") !== -1) ? o.date : formatDateTime(o.id);
 
         var card = document.createElement("div");
@@ -824,13 +685,13 @@ function renderAll() {
         var topArea = document.createElement("div");
         topArea.className = "space-y-3";
 
-        // 패키지 일러스트 썸네일 + 품목 정보
+        // 분류 기준 고정 썸네일 + 품목 정보
         var itemHeader = document.createElement("div");
         itemHeader.className = "flex items-start gap-3.5";
 
         var thumbWrap = document.createElement("div");
-        thumbWrap.className = "w-16 h-16 rounded-2xl " + illust.bg + " flex items-center justify-center shrink-0 overflow-hidden shadow-2xs";
-        thumbWrap.innerHTML = illust.svg;
+        thumbWrap.className = "w-14 h-14 rounded-2xl " + visual.bg + " flex flex-col items-center justify-center shrink-0 overflow-hidden shadow-2xs select-none";
+        thumbWrap.innerHTML = '<span class="text-2xl leading-none">' + visual.emoji + '</span>';
 
         var textWrap = document.createElement("div");
         textWrap.className = "flex-1 min-w-0";
