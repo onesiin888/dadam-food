@@ -142,11 +142,21 @@ button:disabled {
                 </div>
 
                 <!-- 우측 상단: 일반 직원용 예산 사용률 게이지 & 담당자용 단골 추가 버튼 -->
-                <div class="flex items-center gap-2 shrink-0">
-                    <div id="publicUsageGauge" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-extrabold transition-colors bg-emerald-50 border-emerald-200 text-emerald-700">
-                        <span class="text-[11px] font-extrabold opacity-80">예산 사용률</span>
-                        <span id="publicUsageBlocks" class="font-mono tracking-tighter text-[12px] leading-none">░░░░░░░░░░</span>
-                        <span id="publicUsagePct" class="font-black text-xs">0%</span>
+                <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
+                    <div id="publicUsageGauge" class="w-full sm:w-[232px] rounded-2xl border px-3.5 py-2 transition-all duration-300 bg-emerald-50/70 border-emerald-200/80">
+                        <div class="flex items-center justify-between gap-2 mb-1.5">
+                            <div class="flex items-center gap-1.5">
+                                <span id="publicUsageDot" class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+                                <span class="text-[11px] font-extrabold text-slate-600">예산 사용률</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span id="publicUsageStatus" class="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-emerald-100/90 text-emerald-700 leading-none">여유</span>
+                                <span id="publicUsagePct" class="text-xs font-black tabular-nums text-emerald-700 leading-none">0%</span>
+                            </div>
+                        </div>
+                        <div id="publicUsageTrack" class="w-full h-2 rounded-full overflow-hidden bg-emerald-100/90">
+                            <div id="publicUsageBar" class="h-full rounded-full transition-all duration-500 bg-gradient-to-r from-teal-500 to-emerald-400" style="width: 0%"></div>
+                        </div>
                     </div>
                     <div id="adminPresetControl" class="hidden">
                         <button type="button" id="openAddPresetBtn" class="text-[11px] bg-[#10B981]/15 hover:bg-[#10B981]/25 text-[#065F46] px-3 py-1.5 rounded-xl font-extrabold transition cursor-pointer">+ 단골 품목 추가</button>
@@ -599,6 +609,7 @@ function updateBudgetColors(balance, pct) {
     var balanceEl = document.getElementById("balanceDisplay");
     var progressBar = document.getElementById("budgetProgressBar");
 
+    // 담당자 로그인 상태가 아니면 무조건 숨김 유지
     if (!isAdmin) {
         cardBox.className = "hidden";
         return;
@@ -622,12 +633,15 @@ function updateBudgetColors(balance, pct) {
     }
 }
 
-// 일반 직원용 예산 사용률 10칸 블록 게이지 (금액 비노출, % 구간별 3단계 색상 자동 전환)
+// 일반 직원용 예산 사용률 미니 프로그레스 위젯 (금액 비노출, % 구간별 자동 색상·상태 전환)
 function updatePublicUsageGauge(spent, total, balance) {
     var gaugeEl = document.getElementById("publicUsageGauge");
-    var blocksEl = document.getElementById("publicUsageBlocks");
+    var dotEl = document.getElementById("publicUsageDot");
+    var statusEl = document.getElementById("publicUsageStatus");
     var pctEl = document.getElementById("publicUsagePct");
-    if (!gaugeEl || !blocksEl || !pctEl) return;
+    var trackEl = document.getElementById("publicUsageTrack");
+    var barEl = document.getElementById("publicUsageBar");
+    if (!gaugeEl || !dotEl || !statusEl || !pctEl || !trackEl || !barEl) return;
 
     // 담당자 로그인 시에는 좌측 상세 예산 카드가 보이므로 일반용 게이지는 숨김
     if (isAdmin) {
@@ -637,24 +651,45 @@ function updatePublicUsageGauge(spent, total, balance) {
     gaugeEl.classList.remove("hidden");
 
     var usedPct = total > 0 ? Math.max(0, Math.min(100, Math.round((spent / total) * 100))) : 100;
-    var filledCount = Math.round(usedPct / 10);
-    var blocksStr = "";
-    for (var i = 0; i < 10; i++) {
-        blocksStr += (i < filledCount) ? "▓" : "░";
-    }
+    if (balance <= 0) usedPct = 100;
 
-    blocksEl.innerText = blocksStr;
     pctEl.innerText = usedPct + "%";
+    barEl.style.width = usedPct + "%";
 
-    // 사용률 구간별 3단계 색상 변경 (0~49% 에메랄드 / 50~79% 주황 / 80~100% 빨강)
-    var colorClass = "bg-emerald-50 border-emerald-200 text-emerald-700";
-    if (balance <= 0 || usedPct >= 80) {
-        colorClass = "bg-rose-50 border-rose-200 text-rose-700";
+    // 사용률 구간별 다담랩스·토스 스타일 테마 색상 및 상태 배지 적용
+    if (balance <= 0 || usedPct >= 100) {
+        gaugeEl.className = "w-full sm:w-[232px] rounded-2xl border px-3.5 py-2 transition-all duration-300 bg-rose-50 border-rose-300/90";
+        dotEl.className = "w-2 h-2 rounded-full bg-rose-500 animate-ping shrink-0";
+        statusEl.className = "text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-rose-500 text-white leading-none";
+        statusEl.innerText = "소진 마감";
+        pctEl.className = "text-xs font-black tabular-nums text-rose-600 leading-none";
+        trackEl.className = "w-full h-2 rounded-full overflow-hidden bg-rose-100";
+        barEl.className = "h-full rounded-full transition-all duration-500 bg-gradient-to-r from-rose-500 to-red-500";
+    } else if (usedPct >= 80) {
+        gaugeEl.className = "w-full sm:w-[232px] rounded-2xl border px-3.5 py-2 transition-all duration-300 bg-rose-50/80 border-rose-200/80";
+        dotEl.className = "w-2 h-2 rounded-full bg-rose-500 animate-pulse shrink-0";
+        statusEl.className = "text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-rose-100 text-rose-700 leading-none";
+        statusEl.innerText = "소진 임박";
+        pctEl.className = "text-xs font-black tabular-nums text-rose-600 leading-none";
+        trackEl.className = "w-full h-2 rounded-full overflow-hidden bg-rose-100/90";
+        barEl.className = "h-full rounded-full transition-all duration-500 bg-gradient-to-r from-rose-500 to-pink-500";
     } else if (usedPct >= 50) {
-        colorClass = "bg-amber-50 border-amber-200 text-amber-700";
+        gaugeEl.className = "w-full sm:w-[232px] rounded-2xl border px-3.5 py-2 transition-all duration-300 bg-amber-50/80 border-amber-200/80";
+        dotEl.className = "w-2 h-2 rounded-full bg-amber-500 shrink-0";
+        statusEl.className = "text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-amber-100 text-amber-800 leading-none";
+        statusEl.innerText = "주의";
+        pctEl.className = "text-xs font-black tabular-nums text-amber-700 leading-none";
+        trackEl.className = "w-full h-2 rounded-full overflow-hidden bg-amber-100/90";
+        barEl.className = "h-full rounded-full transition-all duration-500 bg-gradient-to-r from-amber-400 to-orange-400";
+    } else {
+        gaugeEl.className = "w-full sm:w-[232px] rounded-2xl border px-3.5 py-2 transition-all duration-300 bg-emerald-50/70 border-emerald-200/80";
+        dotEl.className = "w-2 h-2 rounded-full bg-emerald-500 shrink-0";
+        statusEl.className = "text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-emerald-100/90 text-emerald-700 leading-none";
+        statusEl.innerText = "여유";
+        pctEl.className = "text-xs font-black tabular-nums text-emerald-700 leading-none";
+        trackEl.className = "w-full h-2 rounded-full overflow-hidden bg-emerald-100/90";
+        barEl.className = "h-full rounded-full transition-all duration-500 bg-gradient-to-r from-teal-500 to-emerald-400";
     }
-
-    gaugeEl.className = "inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-extrabold transition-colors " + colorClass;
 }
 
 function renderAll() {
