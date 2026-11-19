@@ -50,6 +50,16 @@ button:disabled {
     box-shadow: none;
     transform: none;
 }
+.header-action-btn {
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06), inset 0 -1px 0 rgba(15, 23, 42, 0.06);
+}
+.header-action-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.1), inset 0 -1px 0 rgba(15, 23, 42, 0.08);
+}
+.header-action-btn:active {
+    transform: translateY(0) scale(0.98);
+}
 .custom-scroll::-webkit-scrollbar { height: 6px; width: 6px; }
 .custom-scroll::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
 </style>
@@ -59,7 +69,7 @@ button:disabled {
 <!-- 상단 헤더 -->
 <header class="max-w-5xl w-full mx-auto px-4 sm:px-6 pt-4 pb-2">
     <div class="flex flex-wrap justify-between items-center gap-2.5">
-        <!-- 좌측: 다담랩스 로고 + 타이틀 + 배지 -->
+        <!-- 좌측: 다담랩스 로고 + 타이틀 + 상태 배지 -->
         <div class="flex flex-wrap items-center gap-2.5 sm:gap-3">
             <div class="flex flex-col items-center justify-center shrink-0 select-none">
                 <svg class="w-10 h-6" viewBox="0 0 120 76" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -86,15 +96,20 @@ button:disabled {
                     <span id="syncDot" class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span id="syncStatusText">실시간 동기화 완료</span>
                 </button>
-        <!-- 우측: 이용안내 & 설정 & 담당자 로그인 -->
-        <div class="flex items-center gap-1.5">
-            <button type="button" id="guideBtn" class="text-xs bg-white hover:bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full font-extrabold shadow-2xs transition cursor-pointer">
-                ❓ 이용안내
+            </div>
+        </div>
+
+        <!-- 우측: 이용안내 & 설정 & 담당자 로그인 액션 버튼 -->
+        <div class="flex items-center gap-2">
+            <button type="button" id="guideBtn" class="header-action-btn inline-flex items-center gap-1.5 text-xs bg-white hover:bg-teal-50/70 text-slate-800 hover:text-teal-800 border border-slate-300/80 hover:border-teal-400 px-3.5 py-2 rounded-xl font-extrabold transition-all cursor-pointer">
+                <span>❓</span>
+                <span>이용안내</span>
             </button>
-            <button type="button" id="settingsBtn" class="hidden text-xs bg-white hover:bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full font-extrabold shadow-2xs transition cursor-pointer">
-                ⚙️ 보드 설정
+            <button type="button" id="settingsBtn" class="hidden header-action-btn inline-flex items-center gap-1.5 text-xs bg-white hover:bg-slate-50 text-slate-800 border border-slate-300/80 hover:border-slate-400 px-3.5 py-2 rounded-xl font-extrabold transition-all cursor-pointer">
+                <span>⚙️</span>
+                <span>보드 설정</span>
             </button>
-            <button type="button" id="adminBtn" class="text-xs bg-[#262D38] hover:bg-slate-800 text-white px-3.5 py-1.5 rounded-full font-extrabold transition shadow-xs cursor-pointer">
+            <button type="button" id="adminBtn" class="header-action-btn inline-flex items-center gap-1.5 text-xs bg-[#1E293B] hover:bg-[#0F172A] text-white border border-slate-700 px-4 py-2 rounded-xl font-extrabold transition-all cursor-pointer">
                 🔒 담당자 로그인
             </button>
         </div>
@@ -758,14 +773,14 @@ function renderAll() {
 
     if (isAdmin) {
         adminBtn.innerText = "🔓 담당자 종료";
-        adminBtn.className = "text-xs bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-1.5 rounded-full font-extrabold shadow-xs cursor-pointer";
+        adminBtn.className = "header-action-btn inline-flex items-center gap-1.5 text-xs bg-rose-600 hover:bg-rose-700 text-white border border-rose-500 px-4 py-2 rounded-xl font-extrabold transition-all cursor-pointer";
         settingsBtn.classList.remove("hidden");
         presetCtrl.classList.remove("hidden");
         budgetCtrl.classList.remove("hidden");
         guideBox.className = "lg:col-span-8 toss-card p-4 sm:p-5 flex flex-col justify-between";
     } else {
         adminBtn.innerText = "🔒 담당자 로그인";
-        adminBtn.className = "text-xs bg-[#262D38] hover:bg-slate-800 text-white px-3.5 py-1.5 rounded-full font-extrabold shadow-xs cursor-pointer";
+        adminBtn.className = "header-action-btn inline-flex items-center gap-1.5 text-xs bg-[#1E293B] hover:bg-[#0F172A] text-white border border-slate-700 px-4 py-2 rounded-xl font-extrabold transition-all cursor-pointer";
         settingsBtn.classList.add("hidden");
         presetCtrl.classList.add("hidden");
         budgetCtrl.classList.add("hidden");
