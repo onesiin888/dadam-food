@@ -926,11 +926,11 @@ function renderAll() {
             admDiv.innerHTML = "📢 담당자 안내: " + o.adminMemo;
             topArea.appendChild(admDiv);
         }
-        // 결제완료 및 결제금액 표시
+        // 상단 '✅ 결제완료' 배지와 역할을 분리하여 하단 박스에는 '💳 결제 금액'으로 표기
         if (isPaid) {
             var priceDiv = document.createElement("div");
             priceDiv.className = "text-[11px] font-extrabold bg-emerald-50 border border-emerald-100 text-emerald-900 px-3 py-1.5 rounded-xl flex justify-between items-center";
-            priceDiv.innerHTML = '<span>💳 결제완료</span><span class="text-emerald-700 font-black">' + Number(o.price).toLocaleString() + '원</span>';
+            priceDiv.innerHTML = '<span>💳 결제 금액</span><span class="text-emerald-700 font-black">' + Number(o.price).toLocaleString() + '원</span>';
             topArea.appendChild(priceDiv);
         }
 
