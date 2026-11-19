@@ -173,7 +173,7 @@ button:disabled {
                     <span>🚫 이번 달 예산이 모두 소진되었습니다</span>
                 </div>
                 <p class="text-[11px] font-semibold text-rose-700 leading-relaxed">
-                    예산이 모두 사용되어 신규 간식·비품 신청이 마감되었습니다. 기존 목록의 <strong>'👍 나도 원해요'</strong> 공감은 계속 누르실 수 있습니다.
+                    예산이 모두 사용되어 신규 간식·비품 신청이 마감되었습니다. 다음달에 신청부탁드립니다
                 </p>
             </div>
 
@@ -745,12 +745,20 @@ function renderAll() {
         var textWrap = document.createElement("div");
         textWrap.className = "flex-1 min-w-0";
 
+        var isPaid = Number(o.price) > 0;
+        var paidBadgeHtml = isPaid
+            ? '<span class="text-[10px] font-extrabold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">✅ 결제완료</span>'
+            : '';
+
         var linkTag = (o.link && o.link.indexOf("http") === 0)
             ? '<a href="' + o.link + '" target="_blank" rel="noopener noreferrer" class="text-[10px] font-extrabold text-teal-700 bg-teal-50 hover:bg-teal-100 px-2 py-0.5 rounded transition">구매링크 ↗</a>'
             : '';
 
         textWrap.innerHTML = '<div class="flex flex-wrap items-center justify-between gap-1 mb-0.5">'
+            + '<div class="flex flex-wrap items-center gap-1">'
             + '<span class="text-[10px] font-extrabold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">' + o.category + '</span>'
+            + paidBadgeHtml
+            + '</div>'
             + linkTag
             + '</div>'
             + '<h3 class="text-sm font-black text-slate-900 leading-snug break-words">' + o.name + '</h3>'
@@ -775,18 +783,18 @@ function renderAll() {
             admDiv.innerHTML = "📢 담당자 안내: " + o.adminMemo;
             topArea.appendChild(admDiv);
         }
-        // 결제 금액은 담당자 로그인 시에만 노출
-        if (isAdmin && o.price > 0) {
+        // 결제 완료된 항목은 일반 직원에게도 '결제완료' 상태와 결제 금액 표시
+        if (isPaid) {
             var priceDiv = document.createElement("div");
-            priceDiv.className = "text-[11px] font-extrabold bg-slate-100 text-slate-800 px-3 py-1.5 rounded-xl flex justify-between items-center";
-            priceDiv.innerHTML = '<span>💳 결제 금액</span><span class="text-teal-700 font-black">' + Number(o.price).toLocaleString() + '원</span>';
+            priceDiv.className = "text-[11px] font-extrabold bg-emerald-50/80 border border-emerald-200/70 text-emerald-900 px-3 py-1.5 rounded-xl flex justify-between items-center";
+            priceDiv.innerHTML = '<span>💳 결제완료</span><span class="text-emerald-700 font-black">' + Number(o.price).toLocaleString() + '원</span>';
             topArea.appendChild(priceDiv);
         }
 
+        // 하단: 컴팩트한 민트 '👍 나도 원해요' 버튼
         var bottomArea = document.createElement("div");
         bottomArea.className = "space-y-2";
 
-        // 공감 버튼은 예산 소진 시에도 계속 활성화 유지
         var likeBtn = document.createElement("button");
         likeBtn.type = "button";
         likeBtn.className = "w-full py-2 rounded-xl font-black text-xs transition cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs "
@@ -801,7 +809,7 @@ function renderAll() {
         };
         bottomArea.appendChild(likeBtn);
 
-        // 담당자 전용 관리 액션 바
+        // 담당자 전용 관리 버튼 바
         if (isAdmin) {
             var adminBar = document.createElement("div");
             adminBar.className = "pt-2 border-t border-slate-100 flex flex-wrap justify-between items-center gap-1";
@@ -875,7 +883,7 @@ function renderAll() {
     });
 }
 
-// 수량 스테퍼 및 단위 칩 이벤트
+// 수량 +/- 및 단위 선택 이벤트 연결 (예산 소진 시 차단)
 document.getElementById("qtyMinusBtn").onclick = function() {
     if (isBudgetExhausted) return;
     var qtyInput = document.getElementById("item_qty");
@@ -902,7 +910,7 @@ document.querySelectorAll(".qty-unit-btn").forEach(function(btn) {
     };
 });
 
-// 담당자 로그인/종료 처리
+// 담당자 로그인/종료 이벤트
 function openAdminLogin() {
     if (isAdmin) {
         isAdmin = false;
@@ -940,7 +948,7 @@ document.getElementById("adminPasswordInput").onkeydown = function(e) {
     if (e.key === "Enter") tryLogin();
 };
 
-// 신청 폼 제출
+// 신규 신청 폼 제출
 document.getElementById("orderForm").onsubmit = function(e) {
     e.preventDefault();
     if (isBudgetExhausted) {
@@ -979,7 +987,7 @@ document.getElementById("orderForm").onsubmit = function(e) {
 document.getElementById("sortOrder").onchange = renderAll;
 document.getElementById("filterCategory").onchange = renderAll;
 
-// 예산 설정 모달 (0원 입력 시에도 700000으로 되돌아가지 않도록 수정)
+// 예산 설정 모달 (0원 저장 시에도 정상 표시)
 document.getElementById("openBudgetBtn").onclick = function() {
     document.getElementById("budgetInputModal").value = (state.totalBudget !== undefined && state.totalBudget !== null) ? state.totalBudget : 700000;
     document.getElementById("budgetModal").classList.remove("hidden");
@@ -1058,7 +1066,7 @@ document.getElementById("savePresetBtn").onclick = function() {
     showToast("단골 품목이 등록되었습니다!");
 };
 
-// 보드 설정 모달
+// 보드 및 비밀번호 설정 모달
 document.getElementById("settingsBtn").onclick = function() {
     document.getElementById("settingNoticeInput").value = state.notice || "";
     document.getElementById("settingPasswordInput").value = "";
@@ -1077,12 +1085,13 @@ document.getElementById("saveSettingsBtn").onclick = function() {
     showToast(newPwd ? "공지 및 새 비밀번호 실시간 저장 완료!" : "공지 저장 완료!");
 };
 
+// 수동 동기화 버튼
 document.getElementById("syncBadge").onclick = function() {
     pullFromCloud();
     showToast("🔄 최신 데이터 동기화 완료!");
 };
 
-// 초기 구동 및 3초 주기 실시간 동기화
+// 초기 구동
 loadLocal();
 renderAll();
 pullFromCloud();
