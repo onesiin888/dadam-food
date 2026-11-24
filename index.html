@@ -153,7 +153,7 @@ button:disabled {
                         <h2 class="text-sm font-black text-slate-900 tracking-tight">자주 찾는 단골 품목</h2>
                         <span class="text-[11px] font-bold text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-full" id="headerNoticeText">먹고 싶은 간식이나 필요한 비품을 등록하거나 '나도 원해요'를 눌러주세요.</span>
                     </div>
-                    <p class="text-[11px] font-medium text-slate-400 mt-0.5">카드를 클릭하면 아래 신청서에 분류·품목명·수량·링크가 자동으로 채워집니다</p>
+                    <p class="text-[11px] font-medium text-slate-400 mt-0.5">카드를 클릭하면 아래 신청서에 분류·품목명·링크가 자동으로 채워집니다</p>
                 </div>
 
                 <!-- 우측 상단: 일반 직원용 예산 사용률 게이지 & 담당자용 단골 추가 버튼 -->
@@ -227,30 +227,10 @@ button:disabled {
                     </div>
                 </div>
 
-                <!-- 품목명 및 수량 -->
-                <div class="space-y-2">
-                    <div>
-                        <label class="block text-[11px] font-extrabold text-slate-700 mb-1">품목명 <span class="text-rose-500">*</span></label>
-                        <input type="text" id="item_name" required placeholder="예: 코카콜라 제로 355ml" class="w-full text-xs px-3 py-2 toss-input font-semibold text-slate-800 placeholder:text-slate-400">
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-center mb-1">
-                            <label class="block text-[11px] font-extrabold text-slate-700">수량 선택/입력 <span class="text-rose-500">*</span></label>
-                            <div class="flex items-center gap-1">
-                                <button type="button" data-unit="개" class="qty-unit-btn text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-teal-50 text-teal-800 hover:bg-teal-100 transition cursor-pointer">개</button>
-                                <button type="button" data-unit="박스" class="qty-unit-btn text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 hover:bg-slate-200 transition cursor-pointer">박스</button>
-                                <button type="button" data-unit="팩" class="qty-unit-btn text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 hover:bg-slate-200 transition cursor-pointer">팩</button>
-                                <button type="button" data-unit="세트" class="qty-unit-btn text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 hover:bg-slate-200 transition cursor-pointer">세트</button>
-                                <button type="button" data-unit="판" class="qty-unit-btn text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 hover:bg-slate-200 transition cursor-pointer">판</button>
-                            </div>
-                        </div>
-                        <div class="flex items-center toss-input px-1.5 py-1" id="qtyControlBox">
-                            <button type="button" id="qtyMinusBtn" class="w-7 h-7 rounded-lg bg-white hover:bg-slate-100 text-slate-700 font-black text-sm shadow-2xs transition cursor-pointer shrink-0">-</button>
-                            <input type="text" id="item_qty" required value="1개" class="w-full bg-transparent text-center text-xs font-black text-slate-900 focus:outline-none px-1">
-                            <button type="button" id="qtyPlusBtn" class="w-7 h-7 rounded-lg bg-white hover:bg-slate-100 text-teal-700 font-black text-sm shadow-2xs transition cursor-pointer shrink-0">+</button>
-                        </div>
-                    </div>
+                <!-- 품목명 -->
+                <div>
+                    <label class="block text-[11px] font-extrabold text-slate-700 mb-1">품목명 <span class="text-rose-500">*</span></label>
+                    <input type="text" id="item_name" required placeholder="예: 코카콜라 제로 355ml" class="w-full text-xs px-3 py-2 toss-input font-semibold text-slate-800 placeholder:text-slate-400">
                 </div>
 
                 <!-- 구매 링크 -->
@@ -366,7 +346,7 @@ button:disabled {
 <div id="presetModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl">
         <h3 class="text-base font-black text-slate-900 mb-1">+ 자주 찾는 단골 품목 추가</h3>
-        <p class="text-xs text-slate-500 mb-4">분류, 품목명, 수량, 구매 링크를 입력하면 클릭 시 신청서에 자동 기입됩니다.</p>
+        <p class="text-xs text-slate-500 mb-4">분류, 품목명, 구매 링크를 입력하면 클릭 시 신청서에 자동 기입됩니다.</p>
         <div class="space-y-3 mb-5">
             <div>
                 <label class="block text-xs font-extrabold text-slate-700 mb-1">분류 선택</label>
@@ -379,15 +359,9 @@ button:disabled {
                     <option value="사무용품">📎 사무용품</option>
                 </select>
             </div>
-            <div class="grid grid-cols-12 gap-2.5">
-                <div class="col-span-8">
-                    <label class="block text-xs font-extrabold text-slate-700 mb-1">품목명 <span class="text-rose-500">*</span></label>
-                    <input type="text" id="presetNameInput" placeholder="예: 코카콜라 제로 355ml" class="w-full text-sm px-4 py-3 toss-input font-bold">
-                </div>
-                <div class="col-span-4">
-                    <label class="block text-xs font-extrabold text-slate-700 mb-1">기본 수량</label>
-                    <input type="text" id="presetQtyInput" value="1박스" placeholder="예: 24캔, 1박스" class="w-full text-sm px-3 py-3 toss-input font-black text-center">
-                </div>
+            <div>
+                <label class="block text-xs font-extrabold text-slate-700 mb-1">품목명 <span class="text-rose-500">*</span></label>
+                <input type="text" id="presetNameInput" placeholder="예: 코카콜라 제로 355ml" class="w-full text-sm px-4 py-3 toss-input font-bold">
             </div>
             <div>
                 <label class="block text-xs font-extrabold text-slate-700 mb-1">구매 링크 (URL, 선택)</label>
@@ -441,7 +415,7 @@ button:disabled {
                     <span>🍪</span> <span>1. 자주 찾는 단골 품목 원클릭 입력</span>
                 </div>
                 <p class="text-[11px] font-medium text-slate-600 leading-relaxed">
-                    상단의 단골 품목 카드를 클릭하면 분류·품목명·기본 수량·구매 링크가 아래 신청서에 자동으로 채워집니다.
+                    상단의 단골 품목 카드를 클릭하면 분류·품목명·구매 링크가 아래 신청서에 자동으로 채워집니다.
                 </p>
             </div>
 
@@ -450,7 +424,7 @@ button:disabled {
                     <span>📝</span> <span>2. 간식 · 비품 신청하기 (화·목 정기 발주)</span>
                 </div>
                 <p class="text-[11px] font-medium text-slate-600 leading-relaxed">
-                    이름(익명 가능), 분류, 품목명, 수량을 입력해 올려주세요. 쿠팡·네이버 등 구매 링크를 함께 적어주시면 더욱 정확하게 주문됩니다.
+                    이름(익명 가능), 분류, 품목명을 입력해 올려주세요. 쿠팡·네이버 등 구매 링크를 함께 적어주시면 더욱 정확하게 주문됩니다.
                 </p>
             </div>
 
@@ -496,13 +470,13 @@ function encodePwd(str) {
 var state = {
     orders: [],
     presets: [
-        { name: "코카콜라 제로 355ml", qty: "1박스", category: "커피·음료", link: "" },
-        { name: "카누 미니 다크로스트", qty: "1박스", category: "커피·음료", link: "" },
-        { name: "오리온 비초비", qty: "3박스", category: "과자·스낵", link: "" },
-        { name: "굳지않는 앙금절편", qty: "1박스", category: "떡", link: "" },
-        { name: "무항생제 구운란", qty: "1판", category: "라면·간편식", link: "" },
-        { name: "종이컵 6.5온스", qty: "1박스", category: "탕비실 소모품", link: "" },
-        { name: "두툼한 물티슈", qty: "10팩", category: "탕비실 소모품", link: "" }
+        { name: "코카콜라 제로 355ml", category: "커피·음료", link: "" },
+        { name: "카누 미니 다크로스트", category: "커피·음료", link: "" },
+        { name: "오리온 비초비", category: "과자·스낵", link: "" },
+        { name: "굳지않는 앙금절편", category: "떡", link: "" },
+        { name: "무항생제 구운란", category: "라면·간편식", link: "" },
+        { name: "종이컵 6.5온스", category: "탕비실 소모품", link: "" },
+        { name: "두툼한 물티슈", category: "탕비실 소모품", link: "" }
     ],
     totalBudget: 700000,
     notice: "먹고 싶은 간식이나 필요한 비품을 등록하거나 '나도 원해요'를 눌러주세요.",
@@ -552,16 +526,6 @@ function formatDateTime(ts) {
     var hours = String(d.getHours()).padStart(2, "0");
     var mins = String(d.getMinutes()).padStart(2, "0");
     return month + "월 " + day + "일 " + hours + ":" + mins;
-}
-
-// 수량 문자열에서 숫자와 단위 분리
-function parseQty(val) {
-    var str = String(val || "1개").trim();
-    var match = str.match(/^(\d+)\s*(.*)$/);
-    if (match) {
-        return { num: parseInt(match[1], 10) || 1, unit: match[2] || "개" };
-    }
-    return { num: 1, unit: str || "개" };
 }
 
 function loadLocal() {
@@ -640,18 +604,11 @@ function updateOrderFormLockState(exhausted) {
     var banner = document.getElementById("budgetExhaustedBanner");
     var badge = document.getElementById("orderStatusBadge");
     var submitBtn = document.getElementById("submitOrderBtn");
-    var qtyBox = document.getElementById("qtyControlBox");
 
-    var inputIds = ["author", "category", "item_name", "item_qty", "link", "req_note"];
+    var inputIds = ["author", "category", "item_name", "link", "req_note"];
     inputIds.forEach(function(id) {
         var el = document.getElementById(id);
         if (el) el.disabled = exhausted;
-    });
-
-    document.getElementById("qtyMinusBtn").disabled = exhausted;
-    document.getElementById("qtyPlusBtn").disabled = exhausted;
-    document.querySelectorAll(".qty-unit-btn").forEach(function(btn) {
-        btn.disabled = exhausted;
     });
 
     if (exhausted) {
@@ -659,7 +616,6 @@ function updateOrderFormLockState(exhausted) {
         banner.classList.remove("hidden");
         badge.innerText = "예산 소진 마감";
         badge.className = "text-[10px] font-extrabold text-rose-700 bg-rose-100 px-2.5 py-0.5 rounded-full shrink-0";
-        qtyBox.classList.add("bg-slate-200", "opacity-70");
         submitBtn.disabled = true;
         submitBtn.innerText = "🚫 이번 달 예산 소진으로 신청 마감";
     } else {
@@ -667,7 +623,6 @@ function updateOrderFormLockState(exhausted) {
         banner.classList.add("hidden");
         badge.innerText = "화·목 발주";
         badge.className = "text-[10px] font-extrabold text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-full shrink-0";
-        qtyBox.classList.remove("bg-slate-200", "opacity-70");
         submitBtn.disabled = false;
         submitBtn.innerText = "✨ 신청 목록에 올리기";
     }
@@ -812,8 +767,7 @@ function renderAll() {
 
         tile.innerHTML = '<div class="w-9 h-9 rounded-xl bg-white/85 shadow-2xs flex items-center justify-center text-lg mb-1.5">' + visual.emoji + '</div>'
             + '<span class="text-[9px] font-extrabold px-1.5 py-0.2 rounded mb-0.5 ' + visual.badgeBg + '">' + visual.label + '</span>'
-            + '<div class="text-[11px] font-black text-slate-900 leading-snug line-clamp-1 break-keep">' + p.name + '</div>'
-            + (p.qty ? '<span class="mt-1 text-[9px] font-extrabold text-slate-700 bg-white/80 px-2 py-0.2 rounded-full">' + p.qty + '</span>' : '');
+            + '<div class="text-[11px] font-black text-slate-900 leading-snug line-clamp-1 break-keep">' + p.name + '</div>';
 
         tile.onclick = function() {
             if (isBudgetExhausted) {
@@ -822,7 +776,6 @@ function renderAll() {
             }
             document.getElementById("category").value = p.category || "과자·스낵";
             document.getElementById("item_name").value = p.name;
-            document.getElementById("item_qty").value = p.qty || "1개";
             document.getElementById("link").value = p.link || "";
             document.getElementById("item_name").focus();
             showToast("'" + p.name + "' 정보가 신청서에 자동 입력되었습니다!");
@@ -906,8 +859,7 @@ function renderAll() {
             + '</div>'
             + '<h3 class="text-sm font-black text-slate-900 leading-snug break-words">' + o.name + '</h3>'
             + '<div class="flex flex-wrap items-center gap-1.5 mt-1">'
-            + '<span class="text-[11px] font-black text-teal-800 bg-teal-50 px-2 py-0.5 rounded-md">수량: ' + (o.qty || "1개") + '</span>'
-            + '<span class="text-[11px] font-bold text-slate-400">· ' + o.author + ' (' + displayDateTime + ')</span>'
+            + '<span class="text-[11px] font-bold text-slate-400">' + o.author + ' · ' + displayDateTime + '</span>'
             + '</div>';
 
         itemHeader.appendChild(thumbWrap);
@@ -993,7 +945,7 @@ function renderAll() {
                     showToast("이미 단골 품목에 등록되어 있습니다.");
                     return;
                 }
-                state.presets.push({ name: o.name, qty: o.qty || "1개", category: o.category, link: o.link || "" });
+                state.presets.push({ name: o.name, category: o.category, link: o.link || "" });
                 renderAll();
                 saveToCloud();
                 showToast("단골 품목으로 등록되었습니다.");
@@ -1023,33 +975,6 @@ function renderAll() {
         listEl.appendChild(card);
     });
 }
-
-// 수량 +/- 및 단위 선택 칩 이벤트
-document.getElementById("qtyMinusBtn").onclick = function() {
-    if (isBudgetExhausted) return;
-    var qtyInput = document.getElementById("item_qty");
-    var parsed = parseQty(qtyInput.value);
-    var nextNum = Math.max(1, parsed.num - 1);
-    qtyInput.value = nextNum + parsed.unit;
-};
-
-document.getElementById("qtyPlusBtn").onclick = function() {
-    if (isBudgetExhausted) return;
-    var qtyInput = document.getElementById("item_qty");
-    var parsed = parseQty(qtyInput.value);
-    var nextNum = parsed.num + 1;
-    qtyInput.value = nextNum + parsed.unit;
-};
-
-document.querySelectorAll(".qty-unit-btn").forEach(function(btn) {
-    btn.onclick = function() {
-        if (isBudgetExhausted) return;
-        var unit = btn.getAttribute("data-unit");
-        var qtyInput = document.getElementById("item_qty");
-        var parsed = parseQty(qtyInput.value);
-        qtyInput.value = parsed.num + unit;
-    };
-});
 
 // 담당자 로그인/종료 모달
 function openAdminLogin() {
@@ -1097,7 +1022,6 @@ document.getElementById("orderForm").onsubmit = function(e) {
         return;
     }
     var name = document.getElementById("item_name").value.trim();
-    var qty = document.getElementById("item_qty").value.trim() || "1개";
     if (!name) return;
     var nowTs = Date.now();
     var item = {
@@ -1105,7 +1029,6 @@ document.getElementById("orderForm").onsubmit = function(e) {
         author: document.getElementById("author").value.trim() || "익명",
         category: document.getElementById("category").value,
         name: name,
-        qty: qty,
         link: document.getElementById("link").value.trim(),
         reqNote: document.getElementById("req_note").value.trim(),
         likes: 1,
@@ -1116,7 +1039,6 @@ document.getElementById("orderForm").onsubmit = function(e) {
     state.orders.unshift(item);
     myLikes.push(item.id);
     document.getElementById("item_name").value = "";
-    document.getElementById("item_qty").value = "1개";
     document.getElementById("link").value = "";
     document.getElementById("req_note").value = "";
     document.getElementById("sortOrder").value = "latest";
@@ -1178,7 +1100,6 @@ document.getElementById("saveMemoBtn").onclick = function() {
 document.getElementById("openAddPresetBtn").onclick = function() {
     document.getElementById("presetCategoryInput").value = document.getElementById("category").value || "과자·스낵";
     document.getElementById("presetNameInput").value = "";
-    document.getElementById("presetQtyInput").value = "1박스";
     document.getElementById("presetLinkInput").value = "";
     document.getElementById("presetModal").classList.remove("hidden");
     document.getElementById("presetNameInput").focus();
@@ -1188,7 +1109,6 @@ document.getElementById("closePresetBtn").onclick = function() {
 };
 document.getElementById("savePresetBtn").onclick = function() {
     var nameVal = document.getElementById("presetNameInput").value.trim();
-    var qtyVal = document.getElementById("presetQtyInput").value.trim() || "1개";
     if (!nameVal) {
         showToast("품목명을 입력해주세요.");
         return;
@@ -1197,7 +1117,6 @@ document.getElementById("savePresetBtn").onclick = function() {
     var linkVal = document.getElementById("presetLinkInput").value.trim();
     state.presets.push({
         name: nameVal,
-        qty: qtyVal,
         category: catVal,
         link: linkVal
     });
