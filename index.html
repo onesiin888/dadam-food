@@ -154,7 +154,7 @@ button:disabled {
                         <span class="text-[11px] font-black text-teal-700 tracking-tight">다담랩스 탕비실 안내</span>
                         <span class="text-[10px] font-extrabold text-slate-400">매주 화·목 정기 발주</span>
                     </div>
-                    <p class="text-xs sm:text-sm font-extrabold text-slate-800 leading-snug break-keep" id="headerNoticeText">먹고 싶은 간식이나 필요한 비품을 자유롭게 신청해 주세요.</p>
+                    <p class="text-xs sm:text-sm font-extrabold text-slate-800 leading-snug break-keep" id="headerNoticeText">먹고 싶은 간식이나 필요한 비품을 등록해 주세요.</p>
                 </div>
             </div>
 
@@ -193,12 +193,12 @@ button:disabled {
             </div>
 
             <!-- 예산 소진 시 노출되는 잠금 안내 배너 -->
-            <div class="p-3.5 rounded-2xl bg-slate-100/80 border border-slate-200 space-y-1">
-                <div class="text-xs font-black text-slate-800 flex items-center gap-1.5">
-                    <span>✅</span> <span>2. 주문 · 결제완료 상태 확인</span>
+            <div id="budgetExhaustedBanner" class="hidden mb-3.5 p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 space-y-1">
+                <div class="text-xs font-black flex items-center gap-1.5">
+                    <span>🚫 이번 달 예산이 모두 소진되었습니다</span>
                 </div>
-                <p class="text-[11px] font-medium text-slate-600 leading-relaxed">
-                    주문이 완료된 품목은 카드가 차분한 회색(그레이) 톤으로 변경되며 <strong>✅ 주문·결제완료</strong> 배지가 표시됩니다.
+                <p class="text-[11px] font-semibold text-rose-700 leading-relaxed">
+                    예산이 모두 사용되어 신규 간식·비품 신청이 마감되었습니다. 다음달에 신청부탁드립니다
                 </p>
             </div>
 
@@ -386,7 +386,7 @@ button:disabled {
                     <span>✅</span> <span>2. 주문 · 결제완료 상태 확인</span>
                 </div>
                 <p class="text-[11px] font-medium text-emerald-800 leading-relaxed">
-                    주문이 완료된 품목은 카드 색상이 민트빛으로 변경되며 <strong>✅ 주문·결제완료</strong> 배지가 표시됩니다.
+                    주문이 완료된 품목은 <strong>✅ 주문·결제완료</strong> 배지가 표시됩니다.
                 </p>
             </div>
 
@@ -423,7 +423,7 @@ var state = {
     orders: [],
     presets: [],
     totalBudget: 700000,
-    notice: "먹고 싶은 간식이나 필요한 비품을 자유롭게 신청해 주세요.",
+    notice: "먹고 싶은 간식이나 필요한 비품을 등록해 주세요.",
     pwdToken: DEFAULT_TOKEN,
     updatedAt: 0
 };
@@ -508,7 +508,8 @@ function saveToCloud() {
         body: JSON.stringify(bodyData)
     }).then(function(res) {
         if (res.ok) {
-            document.getElementById("syncStatusText").innerText = "실시간 동기화 완료";
+            var syncEl = document.getElementById("syncStatusText");
+            if (syncEl) syncEl.innerText = "실시간 동기화 완료";
         }
     }).catch(function() {});
 }
@@ -582,8 +583,8 @@ function updateBudgetColors(balance, pct) {
     var statusDot = document.getElementById("budgetStatusDot");
     var balanceEl = document.getElementById("balanceDisplay");
     var progressBar = document.getElementById("budgetProgressBar");
+    if (!cardBox || !statusDot || !balanceEl || !progressBar) return;
 
-    // 담당자 로그인 상태가 아니면 무조건 숨김 유지
     if (!isAdmin) {
         cardBox.className = "hidden";
         return;
@@ -607,7 +608,7 @@ function updateBudgetColors(balance, pct) {
     }
 }
 
-// 일반 직원용 예산 사용률 미니 프로그레스 위젯 (금액 비노출, % 구간별 자동 색상·상태 전환)
+// 일반 직원용 예산 사용률 미니 프로그레스 위젯
 function updatePublicUsageGauge(spent, total, balance) {
     var wrapEl = document.getElementById("publicGaugeWrap");
     var gaugeEl = document.getElementById("publicUsageGauge");
@@ -618,7 +619,6 @@ function updatePublicUsageGauge(spent, total, balance) {
     var barEl = document.getElementById("publicUsageBar");
     if (!gaugeEl || !dotEl || !statusEl || !pctEl || !trackEl || !barEl) return;
 
-    // 담당자 로그인 시에는 좌측 상세 예산 카드가 보이므로 일반용 게이지는 숨김
     if (isAdmin) {
         if (wrapEl) wrapEl.classList.add("hidden");
         gaugeEl.classList.add("hidden");
@@ -633,7 +633,6 @@ function updatePublicUsageGauge(spent, total, balance) {
     pctEl.innerText = usedPct + "%";
     barEl.style.width = usedPct + "%";
 
-    // 사용률 구간별 다담랩스·토스 스타일 테마 색상 및 상태 배지 적용
     if (balance <= 0 || usedPct >= 100) {
         gaugeEl.className = "w-full sm:w-[248px] rounded-2xl border px-4 py-2.5 transition-all duration-300 bg-rose-50 border-rose-300/90";
         dotEl.className = "w-2 h-2 rounded-full bg-rose-500 animate-ping shrink-0";
@@ -670,9 +669,10 @@ function updatePublicUsageGauge(spent, total, balance) {
 }
 
 function renderAll() {
-    var cleanNotice = (state.notice || "먹고 싶은 간식이나 필요한 비품을 자유롭게 신청해 주세요.")
+    var cleanNotice = (state.notice || "먹고 싶은 간식이나 필요한 비품을 등록해 주세요.")
         .replace(/거나\s*'나도 원해요'를 눌러주세요\.?/g, "해 주세요.")
         .replace(/\(매주 화·목 정기 발주\)/g, "")
+        .replace(/자유롭게 신청해 주세요\.?/g, "등록해 주세요.")
         .trim();
     document.getElementById("headerNoticeText").innerText = cleanNotice;
 
@@ -735,11 +735,11 @@ function renderAll() {
         var visual = getCategoryVisual(o.category);
         var displayDateTime = (o.date && o.date.indexOf(":") !== -1) ? o.date : formatDateTime(o.id);
 
-        // 결제완료(주문완료) 건은 미결제 화이트 카드와 대비되도록 차분한 슬레이트 그레이(회색) 톤으로 변경
+        // 결제완료 처리된 카드만 차분한 그레이 톤으로 구분
         var card = document.createElement("div");
         card.className = isPaid
-            ? "rounded-[20px] p-4 flex flex-col justify-between gap-3 bg-slate-200/65 border border-slate-300/90 transition"
-            : "toss-card p-4 flex flex-col justify-between gap-3 border border-transparent hover:shadow-md transition";
+            ? "rounded-[20px] p-4 flex flex-col justify-between gap-3 bg-slate-200/70 border border-slate-300/80 transition"
+            : "toss-card p-4 flex flex-col justify-between gap-3 hover:shadow-md transition";
 
         var topArea = document.createElement("div");
         topArea.className = "space-y-2";
@@ -748,23 +748,29 @@ function renderAll() {
         itemHeader.className = "flex items-start gap-3";
 
         var thumbWrap = document.createElement("div");
-        thumbWrap.className = "w-11 h-11 rounded-xl " + (isPaid ? "bg-slate-300/70 grayscale opacity-80" : visual.bg) + " flex flex-col items-center justify-center shrink-0 overflow-hidden shadow-2xs select-none relative";
+        thumbWrap.className = "w-11 h-11 rounded-xl flex flex-col items-center justify-center shrink-0 overflow-hidden shadow-2xs select-none "
+            + (isPaid ? "bg-slate-300/80 grayscale opacity-75" : visual.bg);
         thumbWrap.innerHTML = '<span class="text-xl leading-none">' + visual.emoji + '</span>';
 
         var textWrap = document.createElement("div");
         textWrap.className = "flex-1 min-w-0";
 
         var linkTag = (o.link && o.link.indexOf("http") === 0)
-            ? '<a href="' + o.link + '" target="_blank" rel="noopener noreferrer" class="text-[10px] font-extrabold ' + (isPaid ? 'text-slate-600 bg-white/80 hover:bg-white border border-slate-300/80' : 'text-teal-700 bg-white/90 hover:bg-teal-100 border border-teal-200/70') + ' px-2 py-0.5 rounded transition">구매링크 ↗</a>'
+            ? '<a href="' + o.link + '" target="_blank" rel="noopener noreferrer" class="text-[10px] font-extrabold px-2 py-0.5 rounded transition '
+                + (isPaid ? 'text-slate-600 bg-slate-300/70 hover:bg-slate-300' : 'text-teal-700 bg-teal-50 hover:bg-teal-100') + '">구매링크 ↗</a>'
             : '';
 
         var paidBadge = isPaid
-            ? '<span class="text-[10px] font-black text-white bg-slate-600 px-2 py-0.5 rounded-md shadow-2xs">✅ 주문·결제완료</span>'
+            ? '<span class="text-[10px] font-extrabold text-slate-700 bg-slate-300/90 px-1.5 py-0.5 rounded">✅ 주문·결제완료</span>'
             : '';
 
         var catBadgeClass = isPaid
-            ? "text-[10px] font-extrabold text-slate-600 bg-white/75 border border-slate-300/70 px-1.5 py-0.5 rounded"
+            ? "text-[10px] font-extrabold text-slate-500 bg-slate-300/60 px-1.5 py-0.5 rounded"
             : "text-[10px] font-extrabold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded";
+
+        var titleClass = isPaid
+            ? "text-sm font-black text-slate-600 leading-snug break-words"
+            : "text-sm font-black text-slate-900 leading-snug break-words";
 
         textWrap.innerHTML = '<div class="flex flex-wrap items-center justify-between gap-1 mb-0.5">'
             + '<div class="flex items-center gap-1">'
@@ -773,9 +779,9 @@ function renderAll() {
             + '</div>'
             + linkTag
             + '</div>'
-            + '<h3 class="text-sm font-black ' + (isPaid ? 'text-slate-600' : 'text-slate-900') + ' leading-snug break-words">' + o.name + '</h3>'
+            + '<h3 class="' + titleClass + '">' + o.name + '</h3>'
             + '<div class="flex flex-wrap items-center gap-1.5 mt-1">'
-            + '<span class="text-[11px] font-bold ' + (isPaid ? 'text-slate-500' : 'text-slate-400') + '">' + o.author + ' · ' + displayDateTime + '</span>'
+            + '<span class="text-[11px] font-bold text-slate-400">' + o.author + ' · ' + displayDateTime + '</span>'
             + '</div>';
 
         itemHeader.appendChild(thumbWrap);
@@ -785,23 +791,23 @@ function renderAll() {
         if (o.reqNote) {
             var noteDiv = document.createElement("div");
             noteDiv.className = isPaid
-                ? "text-[11px] font-bold bg-white/60 text-slate-600 px-3 py-1.5 rounded-xl border border-slate-300/60"
-                : "text-[11px] font-bold bg-amber-50/95 text-amber-900 px-3 py-1.5 rounded-xl border border-amber-200/60";
+                ? "text-[11px] font-bold bg-slate-300/50 text-slate-600 px-3 py-1.5 rounded-xl"
+                : "text-[11px] font-bold bg-amber-50 text-amber-900 px-3 py-1.5 rounded-xl";
             noteDiv.innerHTML = "📝 " + o.reqNote;
             topArea.appendChild(noteDiv);
         }
         if (o.adminMemo) {
             var admDiv = document.createElement("div");
             admDiv.className = isPaid
-                ? "text-[11px] font-extrabold bg-white/70 text-slate-700 px-3 py-1.5 rounded-xl border border-slate-300/70"
-                : "text-[11px] font-extrabold bg-teal-50 text-teal-900 px-3 py-1.5 rounded-xl border border-teal-200/60";
+                ? "text-[11px] font-extrabold bg-slate-300/60 text-slate-700 px-3 py-1.5 rounded-xl"
+                : "text-[11px] font-extrabold bg-teal-50 text-teal-900 px-3 py-1.5 rounded-xl";
             admDiv.innerHTML = "📢 담당자 안내: " + o.adminMemo;
             topArea.appendChild(admDiv);
         }
         if (isPaid) {
             var priceDiv = document.createElement("div");
-            priceDiv.className = "text-[11px] font-extrabold bg-white/80 border border-slate-300/80 text-slate-600 px-3 py-1.5 rounded-xl flex justify-between items-center";
-            priceDiv.innerHTML = '<span>💳 주문 결제 금액</span><span class="text-slate-800 font-black">' + Number(o.price).toLocaleString() + '원</span>';
+            priceDiv.className = "text-[11px] font-extrabold bg-slate-300/70 border border-slate-300 text-slate-700 px-3 py-1.5 rounded-xl flex justify-between items-center";
+            priceDiv.innerHTML = '<span>💳 결제 금액</span><span class="text-slate-800 font-black">' + Number(o.price).toLocaleString() + '원</span>';
             topArea.appendChild(priceDiv);
         }
 
@@ -810,14 +816,14 @@ function renderAll() {
         if (isAdmin) {
             var bottomArea = document.createElement("div");
             var adminBar = document.createElement("div");
-            adminBar.className = "pt-2 border-t " + (isPaid ? "border-slate-300/80" : "border-slate-100") + " flex flex-wrap justify-between items-center gap-1";
+            adminBar.className = "pt-2 border-t flex flex-wrap justify-between items-center gap-1 " + (isPaid ? "border-slate-300/80" : "border-slate-100");
 
             var leftBtns = document.createElement("div");
             leftBtns.className = "flex items-center gap-1";
 
             var memoBtn = document.createElement("button");
             memoBtn.type = "button";
-            memoBtn.className = "text-[10px] px-2.5 py-1 rounded-lg font-extrabold bg-white hover:bg-slate-100 text-slate-700 border border-slate-200/80 cursor-pointer";
+            memoBtn.className = "text-[10px] px-2.5 py-1 rounded-lg font-extrabold bg-white/80 hover:bg-white text-slate-700 border border-slate-200 cursor-pointer";
             memoBtn.innerText = "💬 메모";
             memoBtn.onclick = function() {
                 activeOrderId = o.id;
@@ -827,10 +833,8 @@ function renderAll() {
 
             var priceBtn = document.createElement("button");
             priceBtn.type = "button";
-            priceBtn.className = isPaid
-                ? "text-[10px] px-2.5 py-1 rounded-lg font-extrabold bg-slate-600 hover:bg-slate-700 text-white cursor-pointer"
-                : "text-[10px] px-2.5 py-1 rounded-lg font-extrabold bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer";
-            priceBtn.innerText = isPaid ? "💰 금액수정" : "💰 결제완료 처리";
+            priceBtn.className = "text-[10px] px-2.5 py-1 rounded-lg font-extrabold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 cursor-pointer";
+            priceBtn.innerText = "💰 금액입력";
             priceBtn.onclick = function() {
                 activeOrderId = o.id;
                 document.getElementById("priceInputModal").value = o.price || "";
@@ -842,7 +846,7 @@ function renderAll() {
 
             var delBtn = document.createElement("button");
             delBtn.type = "button";
-            delBtn.className = "text-[10px] px-2 py-1 rounded-lg font-extrabold text-rose-600 hover:bg-rose-50 cursor-pointer";
+            delBtn.className = "text-[10px] px-2.5 py-1 rounded-lg font-extrabold text-rose-600 hover:bg-rose-50 cursor-pointer";
             delBtn.innerText = "삭제";
             delBtn.onclick = function() {
                 state.orders = state.orders.filter(function(item) { return item.id !== o.id; });
@@ -934,7 +938,7 @@ document.getElementById("orderForm").onsubmit = function(e) {
 document.getElementById("sortOrder").onchange = renderAll;
 document.getElementById("filterCategory").onchange = renderAll;
 
-// 예산 설정 모달 (0원 저장 시에도 0원 그대로 표시)
+// 예산 설정 모달
 document.getElementById("openBudgetBtn").onclick = function() {
     document.getElementById("budgetInputModal").value = (state.totalBudget !== undefined && state.totalBudget !== null) ? state.totalBudget : 700000;
     document.getElementById("budgetModal").classList.remove("hidden");
