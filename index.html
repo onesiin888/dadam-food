@@ -806,19 +806,28 @@ function renderAll() {
             admDiv.innerHTML = "📢 담당자 안내: " + o.adminMemo;
             topArea.appendChild(admDiv);
         }
-        if (isPaid) {
-            var priceDiv = document.createElement("div");
-            priceDiv.className = "text-[11px] font-extrabold bg-slate-300/70 border border-slate-300 text-slate-700 px-3 py-1.5 rounded-xl flex justify-between items-center";
-            priceDiv.innerHTML = '<span>💳 결제 금액</span><span class="text-slate-800 font-black">' + Number(o.price).toLocaleString() + '원</span>';
-            topArea.appendChild(priceDiv);
-        }
 
         card.appendChild(topArea);
 
+        // 하단 상태 푸터 바 (카드 높이를 동일하게 유지하면서 빈 여백 해소)
+        var bottomArea = document.createElement("div");
+        bottomArea.className = "space-y-2 pt-2 border-t " + (isPaid ? "border-slate-300/80" : "border-slate-100");
+
+        var statusFooter = document.createElement("div");
+        if (isPaid) {
+            statusFooter.className = "flex items-center justify-between text-[11px] font-extrabold text-slate-700 bg-slate-300/60 px-3 py-1.5 rounded-xl";
+            statusFooter.innerHTML = '<span class="flex items-center gap-1"><span>✅</span><span>주문·결제완료</span></span>'
+                + '<span class="text-slate-900 font-black tabular-nums">' + Number(o.price).toLocaleString() + '원</span>';
+        } else {
+            statusFooter.className = "flex items-center justify-between text-[11px] font-extrabold text-amber-800 bg-amber-50/80 px-3 py-1.5 rounded-xl";
+            statusFooter.innerHTML = '<span class="flex items-center gap-1"><span>⏳</span><span>발주 대기</span></span>'
+                + '<span class="text-[10px] font-bold text-amber-600/90">주문 예정</span>';
+        }
+        bottomArea.appendChild(statusFooter);
+
         if (isAdmin) {
-            var bottomArea = document.createElement("div");
             var adminBar = document.createElement("div");
-            adminBar.className = "pt-2 border-t flex flex-wrap justify-between items-center gap-1 " + (isPaid ? "border-slate-300/80" : "border-slate-100");
+            adminBar.className = "pt-1.5 flex flex-wrap justify-between items-center gap-1";
 
             var leftBtns = document.createElement("div");
             leftBtns.className = "flex items-center gap-1";
@@ -860,8 +869,9 @@ function renderAll() {
             adminBar.appendChild(leftBtns);
             adminBar.appendChild(delBtn);
             bottomArea.appendChild(adminBar);
-            card.appendChild(bottomArea);
         }
+
+        card.appendChild(bottomArea);
 
         listEl.appendChild(card);
     });
