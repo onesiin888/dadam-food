@@ -818,10 +818,14 @@ function renderAll() {
             statusFooter.className = "flex items-center justify-between text-[11px] font-extrabold text-slate-700 bg-slate-300/60 px-3 py-1.5 rounded-xl";
             statusFooter.innerHTML = '<span class="flex items-center gap-1"><span>✅</span><span>주문·결제완료</span></span>'
                 + '<span class="text-slate-900 font-black tabular-nums">' + Number(o.price).toLocaleString() + '원</span>';
+        } else if (o.adminMemo) {
+            statusFooter.className = "flex items-center justify-between text-[11px] font-extrabold text-indigo-800 bg-indigo-50/90 px-3 py-1.5 rounded-xl";
+            statusFooter.innerHTML = '<span class="flex items-center gap-1"><span>💬</span><span>담당자 확인</span></span>'
+                + '<span class="text-[10px] font-bold text-indigo-600/90">안내 등록됨</span>';
         } else {
-            statusFooter.className = "flex items-center justify-between text-[11px] font-extrabold text-amber-800 bg-amber-50/80 px-3 py-1.5 rounded-xl";
+            statusFooter.className = "flex items-center justify-between text-[11px] font-extrabold text-sky-800 bg-sky-50/90 px-3 py-1.5 rounded-xl";
             statusFooter.innerHTML = '<span class="flex items-center gap-1"><span>⏳</span><span>발주 대기</span></span>'
-                + '<span class="text-[10px] font-bold text-amber-600/90">주문 예정</span>';
+                + '<span class="text-[10px] font-bold text-sky-600/90">주문 예정</span>';
         }
         bottomArea.appendChild(statusFooter);
 
