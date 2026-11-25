@@ -119,11 +119,11 @@ button:disabled {
 <!-- 메인 콘텐츠 -->
 <main class="max-w-5xl w-full mx-auto px-4 sm:px-6 py-3 flex-1 space-y-4">
 
-    <!-- 상단 섹션: [담당자 전용 예산 현황] + [자주 찾는 단골 품목 + 일반용 사용률 게이지] -->
+    <!-- 상단 섹션: [담당자 전용 예산 현황] + [보드 공지 및 예산 사용률 요약 카드] -->
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
 
         <!-- 1. 이번 달 탕비실 예산 현황 (담당자 로그인 시에만 표시) -->
-        <div id="budgetCardBox" class="hidden lg:col-span-4 toss-card p-4 sm:p-5 flex flex-col justify-between transition-colors duration-300">
+        <div id="budgetCardBox" class="hidden lg:col-span-5 toss-card p-4 sm:p-5 flex flex-col justify-between transition-colors duration-300">
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-1.5">
                     <span id="budgetStatusDot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
@@ -145,46 +145,41 @@ button:disabled {
             </div>
         </div>
 
-        <!-- 2. 자주 찾는 단골 품목 -->
-        <div id="orderGuideBox" class="lg:col-span-12 toss-card p-4 sm:p-5 flex flex-col justify-between">
-            <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
-                <div>
-                    <div class="flex flex-wrap items-center gap-2">
-                        <h2 class="text-sm font-black text-slate-900 tracking-tight">자주 찾는 단골 품목</h2>
-                        <span class="text-[11px] font-bold text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-full" id="headerNoticeText">먹고 싶은 간식이나 필요한 비품을 등록하거나 '나도 원해요'를 눌러주세요.</span>
+        <!-- 2. 상단 안내 & 예산 사용률 바 -->
+        <div id="orderGuideBox" class="lg:col-span-12 toss-card p-4 sm:p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3.5">
+            <div class="flex items-start sm:items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center text-lg shrink-0 shadow-2xs">📢</div>
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2 mb-0.5">
+                        <span class="text-[11px] font-black text-teal-700 tracking-tight">다담랩스 탕비실 안내</span>
+                        <span class="text-[10px] font-extrabold text-slate-400">매주 화·목 정기 발주</span>
                     </div>
-                    <p class="text-[11px] font-medium text-slate-400 mt-0.5">카드를 클릭하면 아래 신청서에 분류·품목명·링크가 자동으로 채워집니다</p>
-                </div>
-
-                <!-- 우측 상단: 일반 직원용 예산 사용률 게이지 & 담당자용 단골 추가 버튼 -->
-                <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
-                    <div id="publicUsageGauge" class="w-full sm:w-[232px] rounded-2xl border px-3.5 py-2 transition-all duration-300 bg-emerald-50/70 border-emerald-200/80">
-                        <div class="flex items-center justify-between gap-2 mb-1.5">
-                            <div class="flex items-center gap-1.5">
-                                <span id="publicUsageDot" class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
-                                <span class="text-[11px] font-extrabold text-slate-600">예산 사용률</span>
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <span id="publicUsageStatus" class="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-emerald-100/90 text-emerald-700 leading-none">여유</span>
-                                <span id="publicUsagePct" class="text-xs font-black tabular-nums text-emerald-700 leading-none">0%</span>
-                            </div>
-                        </div>
-                        <div id="publicUsageTrack" class="w-full h-2 rounded-full overflow-hidden bg-emerald-100/90">
-                            <div id="publicUsageBar" class="h-full rounded-full transition-all duration-500 bg-gradient-to-r from-teal-500 to-emerald-400" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    <div id="adminPresetControl" class="hidden">
-                        <button type="button" id="openAddPresetBtn" class="text-[11px] bg-[#10B981]/15 hover:bg-[#10B981]/25 text-[#065F46] px-3 py-1.5 rounded-xl font-extrabold transition cursor-pointer">+ 단골 품목 추가</button>
-                    </div>
+                    <p class="text-xs sm:text-sm font-extrabold text-slate-800 leading-snug break-keep" id="headerNoticeText">먹고 싶은 간식이나 필요한 비품을 자유롭게 신청해 주세요.</p>
                 </div>
             </div>
 
-            <!-- 분류별 파스텔 아이콘 타일 리스트 -->
-            <div id="presetContainer" class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 gap-2"></div>
+            <!-- 우측: 일반 직원용 예산 사용률 게이지 -->
+            <div id="publicGaugeWrap" class="shrink-0 w-full sm:w-auto flex justify-end">
+                <div id="publicUsageGauge" class="w-full sm:w-[248px] rounded-2xl border px-4 py-2.5 transition-all duration-300 bg-emerald-50/70 border-emerald-200/80">
+                    <div class="flex items-center justify-between gap-2 mb-1.5">
+                        <div class="flex items-center gap-1.5">
+                            <span id="publicUsageDot" class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+                            <span class="text-[11px] font-extrabold text-slate-600">이번 달 예산 사용률</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span id="publicUsageStatus" class="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-emerald-100/90 text-emerald-700 leading-none">여유</span>
+                            <span id="publicUsagePct" class="text-xs font-black tabular-nums text-emerald-700 leading-none">0%</span>
+                        </div>
+                    </div>
+                    <div id="publicUsageTrack" class="w-full h-2 rounded-full overflow-hidden bg-emerald-100/90">
+                        <div id="publicUsageBar" class="h-full rounded-full transition-all duration-500 bg-gradient-to-r from-teal-500 to-emerald-400" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- 하단 섹션: [좌측: 간식·비품 신청하기] + [우측: 신청·공감 현황 2열 카드 그리드] -->
+    <!-- 하단 섹션: [좌측: 간식·비품 신청하기] + [우측: 신청 현황 2열 카드 그리드] -->
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
 
         <!-- 좌측 (4칸): 간식 · 비품 신청하기 -->
@@ -198,12 +193,12 @@ button:disabled {
             </div>
 
             <!-- 예산 소진 시 노출되는 잠금 안내 배너 -->
-            <div id="budgetExhaustedBanner" class="hidden mb-3.5 p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 space-y-1">
-                <div class="text-xs font-black flex items-center gap-1.5">
-                    <span>🚫 이번 달 예산이 모두 소진되었습니다</span>
+            <div class="p-3.5 rounded-2xl bg-slate-100/80 border border-slate-200 space-y-1">
+                <div class="text-xs font-black text-slate-800 flex items-center gap-1.5">
+                    <span>✅</span> <span>2. 주문 · 결제완료 상태 확인</span>
                 </div>
-                <p class="text-[11px] font-semibold text-rose-700 leading-relaxed">
-                    예산이 모두 사용되어 신규 간식·비품 신청이 마감되었습니다. 다음달에 신청부탁드립니다
+                <p class="text-[11px] font-medium text-slate-600 leading-relaxed">
+                    주문이 완료된 품목은 카드가 차분한 회색(그레이) 톤으로 변경되며 <strong>✅ 주문·결제완료</strong> 배지가 표시됩니다.
                 </p>
             </div>
 
@@ -251,11 +246,11 @@ button:disabled {
             </form>
         </div>
 
-        <!-- 우측 (8칸): 신청 · 공감 현황 -->
+        <!-- 우측 (8칸): 신청 현황 -->
         <div class="lg:col-span-8 space-y-3">
             <div class="flex flex-wrap justify-between items-center gap-2 px-1">
                 <div class="flex items-center gap-2">
-                    <h2 class="text-sm sm:text-base font-black text-slate-900 tracking-tight">신청 · 공감 현황</h2>
+                    <h2 class="text-sm sm:text-base font-black text-slate-900 tracking-tight">신청 현황</h2>
                     <span id="totalCount" class="text-[11px] bg-teal-600 text-white px-2.5 py-0.5 rounded-full font-extrabold">0건</span>
                 </div>
 
@@ -342,39 +337,6 @@ button:disabled {
     </div>
 </div>
 
-<!-- 단골 품목 추가 모달 -->
-<div id="presetModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl">
-        <h3 class="text-base font-black text-slate-900 mb-1">+ 자주 찾는 단골 품목 추가</h3>
-        <p class="text-xs text-slate-500 mb-4">분류, 품목명, 구매 링크를 입력하면 클릭 시 신청서에 자동 기입됩니다.</p>
-        <div class="space-y-3 mb-5">
-            <div>
-                <label class="block text-xs font-extrabold text-slate-700 mb-1">분류 선택</label>
-                <select id="presetCategoryInput" class="w-full text-sm px-4 py-3 toss-input font-bold">
-                    <option value="과자·스낵">🍪 과자·스낵</option>
-                    <option value="떡">🍡 떡</option>
-                    <option value="커피·음료">🥤 커피·음료</option>
-                    <option value="라면·간편식">🍜 라면·간편식</option>
-                    <option value="탕비실 소모품">🧻 탕비실 소모품</option>
-                    <option value="사무용품">📎 사무용품</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-xs font-extrabold text-slate-700 mb-1">품목명 <span class="text-rose-500">*</span></label>
-                <input type="text" id="presetNameInput" placeholder="예: 코카콜라 제로 355ml" class="w-full text-sm px-4 py-3 toss-input font-bold">
-            </div>
-            <div>
-                <label class="block text-xs font-extrabold text-slate-700 mb-1">구매 링크 (URL, 선택)</label>
-                <input type="text" id="presetLinkInput" placeholder="https://www.coupang.com/..." class="w-full text-sm px-4 py-3 toss-input">
-            </div>
-        </div>
-        <div class="flex space-x-2">
-            <button type="button" id="closePresetBtn" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-2xl font-extrabold text-xs cursor-pointer">취소</button>
-            <button type="button" id="savePresetBtn" class="flex-1 dadam-mint-btn text-white py-3 rounded-2xl font-extrabold text-xs cursor-pointer">단골 품목 저장</button>
-        </div>
-    </div>
-</div>
-
 <!-- 설정 모달 -->
 <div id="settingsModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl">
@@ -407,42 +369,33 @@ button:disabled {
             </div>
             <button type="button" id="closeGuideXBtn" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 font-black text-xs flex items-center justify-center transition cursor-pointer">✕</button>
         </div>
-        <p class="text-xs text-slate-500 mb-4">누구나 간편하게 간식과 비품을 신청하고 공감할 수 있습니다.</p>
+        <p class="text-xs text-slate-500 mb-4">누구나 간편하게 간식과 비품을 신청하고 발주 상태를 확인할 수 있습니다.</p>
 
         <div class="space-y-2.5 overflow-y-auto custom-scroll pr-1 mb-5">
             <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
                 <div class="text-xs font-black text-slate-900 flex items-center gap-1.5">
-                    <span>🍪</span> <span>1. 자주 찾는 단골 품목 원클릭 입력</span>
-                </div>
-                <p class="text-[11px] font-medium text-slate-600 leading-relaxed">
-                    상단의 단골 품목 카드를 클릭하면 분류·품목명·구매 링크가 아래 신청서에 자동으로 채워집니다.
-                </p>
-            </div>
-
-            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
-                <div class="text-xs font-black text-slate-900 flex items-center gap-1.5">
-                    <span>📝</span> <span>2. 간식 · 비품 신청하기 (화·목 정기 발주)</span>
+                    <span>📝</span> <span>1. 간식 · 비품 신청하기 (화·목 정기 발주)</span>
                 </div>
                 <p class="text-[11px] font-medium text-slate-600 leading-relaxed">
                     이름(익명 가능), 분류, 품목명을 입력해 올려주세요. 쿠팡·네이버 등 구매 링크를 함께 적어주시면 더욱 정확하게 주문됩니다.
                 </p>
             </div>
 
-            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
-                <div class="text-xs font-black text-slate-900 flex items-center gap-1.5">
-                    <span>👍</span> <span>3. 중복 신청 대신 '나도 원해요' 공감하기</span>
+            <div class="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-100 space-y-1">
+                <div class="text-xs font-black text-emerald-900 flex items-center gap-1.5">
+                    <span>✅</span> <span>2. 주문 · 결제완료 상태 확인</span>
                 </div>
-                <p class="text-[11px] font-medium text-slate-600 leading-relaxed">
-                    먹고 싶은 간식이 이미 목록에 올라와 있다면 중복 등록하지 말고 <strong>'👍 나도 원해요'</strong> 버튼을 눌러주세요.
+                <p class="text-[11px] font-medium text-emerald-800 leading-relaxed">
+                    주문이 완료된 품목은 카드 색상이 민트빛으로 변경되며 <strong>✅ 주문·결제완료</strong> 배지가 표시됩니다.
                 </p>
             </div>
 
-            <div class="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-100 space-y-1">
-                <div class="text-xs font-black text-emerald-900 flex items-center gap-1.5">
-                    <span>📊</span> <span>4. 예산 사용률 및 결제완료 확인</span>
+            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
+                <div class="text-xs font-black text-slate-900 flex items-center gap-1.5">
+                    <span>📊</span> <span>3. 이번 달 예산 사용률 안내</span>
                 </div>
-                <p class="text-[11px] font-medium text-emerald-800 leading-relaxed">
-                    우측 상단 게이지로 이번 달 예산 사용률(%)을 실시간으로 볼 수 있으며, 주문이 끝난 품목은 <strong>✅ 결제완료</strong>로 표시됩니다. 예산이 100% 소진되면 해당 월의 신규 신청이 자동으로 마감됩니다.
+                <p class="text-[11px] font-medium text-slate-600 leading-relaxed">
+                    우측 상단 게이지로 이번 달 예산 사용률(%)을 실시간으로 볼 수 있으며, 예산이 100% 소진되면 해당 월의 신규 신청이 자동으로 마감됩니다.
                 </p>
             </div>
         </div>
@@ -458,7 +411,6 @@ button:disabled {
 var DB_URL = "https://firestore.googleapis.com/v1/projects/dadam-lounge/databases/(default)/documents/dadam_pantry/main_state";
 
 var STORAGE_KEY = "dadam_food_v99";
-var LIKES_KEY = "dadam_likes_v99";
 var ADMIN_KEY = "dadam_admin_v99";
 var DEFAULT_TOKEN = "MTIzNA=="; // 기본 비밀번호: '1234'
 
@@ -469,22 +421,13 @@ function encodePwd(str) {
 
 var state = {
     orders: [],
-    presets: [
-        { name: "코카콜라 제로 355ml", category: "커피·음료", link: "" },
-        { name: "카누 미니 다크로스트", category: "커피·음료", link: "" },
-        { name: "오리온 비초비", category: "과자·스낵", link: "" },
-        { name: "굳지않는 앙금절편", category: "떡", link: "" },
-        { name: "무항생제 구운란", category: "라면·간편식", link: "" },
-        { name: "종이컵 6.5온스", category: "탕비실 소모품", link: "" },
-        { name: "두툼한 물티슈", category: "탕비실 소모품", link: "" }
-    ],
+    presets: [],
     totalBudget: 700000,
-    notice: "먹고 싶은 간식이나 필요한 비품을 등록하거나 '나도 원해요'를 눌러주세요.",
+    notice: "먹고 싶은 간식이나 필요한 비품을 자유롭게 신청해 주세요.",
     pwdToken: DEFAULT_TOKEN,
     updatedAt: 0
 };
 
-var myLikes = [];
 var isAdmin = false;
 var activeOrderId = null;
 var isBudgetExhausted = false;
@@ -531,14 +474,12 @@ function formatDateTime(ts) {
 function loadLocal() {
     try {
         if (localStorage.getItem(ADMIN_KEY) === "true") isAdmin = true;
-        var l = localStorage.getItem(LIKES_KEY);
-        if (l) myLikes = JSON.parse(l);
         var s = localStorage.getItem(STORAGE_KEY);
         if (s) {
             var p = JSON.parse(s);
             if (p && typeof p === "object") {
                 if (Array.isArray(p.orders)) state.orders = p.orders;
-                if (Array.isArray(p.presets) && p.presets.length > 0) state.presets = p.presets;
+                if (Array.isArray(p.presets)) state.presets = p.presets;
                 if (p.totalBudget !== undefined) state.totalBudget = Number(p.totalBudget);
                 if (p.notice) state.notice = p.notice;
                 if (p.pwdToken) state.pwdToken = p.pwdToken;
@@ -552,7 +493,6 @@ function saveToCloud() {
     state.updatedAt = Date.now();
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        localStorage.setItem(LIKES_KEY, JSON.stringify(myLikes));
     } catch (e) {}
 
     var bodyData = {
@@ -612,19 +552,27 @@ function updateOrderFormLockState(exhausted) {
     });
 
     if (exhausted) {
-        formCard.classList.add("bg-slate-50/90", "ring-1", "ring-rose-200");
-        banner.classList.remove("hidden");
-        badge.innerText = "예산 소진 마감";
-        badge.className = "text-[10px] font-extrabold text-rose-700 bg-rose-100 px-2.5 py-0.5 rounded-full shrink-0";
-        submitBtn.disabled = true;
-        submitBtn.innerText = "🚫 이번 달 예산 소진으로 신청 마감";
+        if (formCard) formCard.classList.add("bg-slate-50/90", "ring-1", "ring-rose-200");
+        if (banner) banner.classList.remove("hidden");
+        if (badge) {
+            badge.innerText = "예산 소진 마감";
+            badge.className = "text-[10px] font-extrabold text-rose-700 bg-rose-100 px-2.5 py-0.5 rounded-full shrink-0";
+        }
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerText = "🚫 이번 달 예산 소진으로 신청 마감";
+        }
     } else {
-        formCard.classList.remove("bg-slate-50/90", "ring-1", "ring-rose-200");
-        banner.classList.add("hidden");
-        badge.innerText = "화·목 발주";
-        badge.className = "text-[10px] font-extrabold text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-full shrink-0";
-        submitBtn.disabled = false;
-        submitBtn.innerText = "✨ 신청 목록에 올리기";
+        if (formCard) formCard.classList.remove("bg-slate-50/90", "ring-1", "ring-rose-200");
+        if (banner) banner.classList.add("hidden");
+        if (badge) {
+            badge.innerText = "화·목 발주";
+            badge.className = "text-[10px] font-extrabold text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-full shrink-0";
+        }
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "✨ 신청 목록에 올리기";
+        }
     }
 }
 
@@ -642,17 +590,17 @@ function updateBudgetColors(balance, pct) {
     }
 
     if (balance <= 0 || pct <= 20) {
-        cardBox.className = "lg:col-span-4 toss-card p-4 sm:p-5 flex flex-col justify-between ring-2 ring-rose-300 bg-rose-50/40";
+        cardBox.className = "lg:col-span-5 toss-card p-4 sm:p-5 flex flex-col justify-between ring-2 ring-rose-300 bg-rose-50/40";
         statusDot.className = "w-2 h-2 rounded-full bg-rose-500 animate-ping";
         balanceEl.className = "text-lg sm:text-xl font-black text-rose-600 tracking-tight";
         progressBar.className = "bg-rose-500 h-2.5 rounded-full transition-all duration-500";
     } else if (pct <= 50) {
-        cardBox.className = "lg:col-span-4 toss-card p-4 sm:p-5 flex flex-col justify-between ring-2 ring-amber-300 bg-amber-50/40";
+        cardBox.className = "lg:col-span-5 toss-card p-4 sm:p-5 flex flex-col justify-between ring-2 ring-amber-300 bg-amber-50/40";
         statusDot.className = "w-2 h-2 rounded-full bg-amber-500";
         balanceEl.className = "text-lg sm:text-xl font-black text-amber-600 tracking-tight";
         progressBar.className = "bg-amber-500 h-2.5 rounded-full transition-all duration-500";
     } else {
-        cardBox.className = "lg:col-span-4 toss-card p-4 sm:p-5 flex flex-col justify-between";
+        cardBox.className = "lg:col-span-5 toss-card p-4 sm:p-5 flex flex-col justify-between";
         statusDot.className = "w-2 h-2 rounded-full bg-emerald-500";
         balanceEl.className = "text-lg sm:text-xl font-black text-slate-900 tracking-tight";
         progressBar.className = "bg-gradient-to-r from-teal-500 to-emerald-400 h-2.5 rounded-full transition-all duration-500";
@@ -661,6 +609,7 @@ function updateBudgetColors(balance, pct) {
 
 // 일반 직원용 예산 사용률 미니 프로그레스 위젯 (금액 비노출, % 구간별 자동 색상·상태 전환)
 function updatePublicUsageGauge(spent, total, balance) {
+    var wrapEl = document.getElementById("publicGaugeWrap");
     var gaugeEl = document.getElementById("publicUsageGauge");
     var dotEl = document.getElementById("publicUsageDot");
     var statusEl = document.getElementById("publicUsageStatus");
@@ -671,9 +620,11 @@ function updatePublicUsageGauge(spent, total, balance) {
 
     // 담당자 로그인 시에는 좌측 상세 예산 카드가 보이므로 일반용 게이지는 숨김
     if (isAdmin) {
+        if (wrapEl) wrapEl.classList.add("hidden");
         gaugeEl.classList.add("hidden");
         return;
     }
+    if (wrapEl) wrapEl.classList.remove("hidden");
     gaugeEl.classList.remove("hidden");
 
     var usedPct = total > 0 ? Math.max(0, Math.min(100, Math.round((spent / total) * 100))) : 100;
@@ -684,7 +635,7 @@ function updatePublicUsageGauge(spent, total, balance) {
 
     // 사용률 구간별 다담랩스·토스 스타일 테마 색상 및 상태 배지 적용
     if (balance <= 0 || usedPct >= 100) {
-        gaugeEl.className = "w-full sm:w-[232px] rounded-2xl border px-3.5 py-2 transition-all duration-300 bg-rose-50 border-rose-300/90";
+        gaugeEl.className = "w-full sm:w-[248px] rounded-2xl border px-4 py-2.5 transition-all duration-300 bg-rose-50 border-rose-300/90";
         dotEl.className = "w-2 h-2 rounded-full bg-rose-500 animate-ping shrink-0";
         statusEl.className = "text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-rose-500 text-white leading-none";
         statusEl.innerText = "소진 마감";
@@ -692,7 +643,7 @@ function updatePublicUsageGauge(spent, total, balance) {
         trackEl.className = "w-full h-2 rounded-full overflow-hidden bg-rose-100";
         barEl.className = "h-full rounded-full transition-all duration-500 bg-gradient-to-r from-rose-500 to-red-500";
     } else if (usedPct >= 80) {
-        gaugeEl.className = "w-full sm:w-[232px] rounded-2xl border px-3.5 py-2 transition-all duration-300 bg-rose-50/80 border-rose-200/80";
+        gaugeEl.className = "w-full sm:w-[248px] rounded-2xl border px-4 py-2.5 transition-all duration-300 bg-rose-50/80 border-rose-200/80";
         dotEl.className = "w-2 h-2 rounded-full bg-rose-500 animate-pulse shrink-0";
         statusEl.className = "text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-rose-100 text-rose-700 leading-none";
         statusEl.innerText = "소진 임박";
@@ -700,7 +651,7 @@ function updatePublicUsageGauge(spent, total, balance) {
         trackEl.className = "w-full h-2 rounded-full overflow-hidden bg-rose-100/90";
         barEl.className = "h-full rounded-full transition-all duration-500 bg-gradient-to-r from-rose-500 to-pink-500";
     } else if (usedPct >= 50) {
-        gaugeEl.className = "w-full sm:w-[232px] rounded-2xl border px-3.5 py-2 transition-all duration-300 bg-amber-50/80 border-amber-200/80";
+        gaugeEl.className = "w-full sm:w-[248px] rounded-2xl border px-4 py-2.5 transition-all duration-300 bg-amber-50/80 border-amber-200/80";
         dotEl.className = "w-2 h-2 rounded-full bg-amber-500 shrink-0";
         statusEl.className = "text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-amber-100 text-amber-800 leading-none";
         statusEl.innerText = "주의";
@@ -708,7 +659,7 @@ function updatePublicUsageGauge(spent, total, balance) {
         trackEl.className = "w-full h-2 rounded-full overflow-hidden bg-amber-100/90";
         barEl.className = "h-full rounded-full transition-all duration-500 bg-gradient-to-r from-amber-400 to-orange-400";
     } else {
-        gaugeEl.className = "w-full sm:w-[232px] rounded-2xl border px-3.5 py-2 transition-all duration-300 bg-emerald-50/70 border-emerald-200/80";
+        gaugeEl.className = "w-full sm:w-[248px] rounded-2xl border px-4 py-2.5 transition-all duration-300 bg-emerald-50/70 border-emerald-200/80";
         dotEl.className = "w-2 h-2 rounded-full bg-emerald-500 shrink-0";
         statusEl.className = "text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-emerald-100/90 text-emerald-700 leading-none";
         statusEl.innerText = "여유";
@@ -719,10 +670,14 @@ function updatePublicUsageGauge(spent, total, balance) {
 }
 
 function renderAll() {
-    document.getElementById("headerNoticeText").innerText = state.notice || "";
+    var cleanNotice = (state.notice || "먹고 싶은 간식이나 필요한 비품을 자유롭게 신청해 주세요.")
+        .replace(/거나\s*'나도 원해요'를 눌러주세요\.?/g, "해 주세요.")
+        .replace(/\(매주 화·목 정기 발주\)/g, "")
+        .trim();
+    document.getElementById("headerNoticeText").innerText = cleanNotice;
+
     var adminBtn = document.getElementById("adminBtn");
     var settingsBtn = document.getElementById("settingsBtn");
-    var presetCtrl = document.getElementById("adminPresetControl");
     var budgetCtrl = document.getElementById("adminBudgetControl");
     var guideBox = document.getElementById("orderGuideBox");
 
@@ -730,16 +685,14 @@ function renderAll() {
         adminBtn.innerText = "🔓 담당자 종료";
         adminBtn.className = "header-action-btn inline-flex items-center gap-1.5 text-xs bg-rose-600 hover:bg-rose-700 text-white border border-rose-500 px-4 py-2 rounded-xl font-extrabold transition-all cursor-pointer";
         settingsBtn.classList.remove("hidden");
-        presetCtrl.classList.remove("hidden");
         budgetCtrl.classList.remove("hidden");
-        guideBox.className = "lg:col-span-8 toss-card p-4 sm:p-5 flex flex-col justify-between";
+        guideBox.className = "lg:col-span-7 toss-card p-4 sm:p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3.5";
     } else {
         adminBtn.innerText = "🔒 담당자 로그인";
         adminBtn.className = "header-action-btn inline-flex items-center gap-1.5 text-xs bg-[#1E293B] hover:bg-[#0F172A] text-white border border-slate-700 px-4 py-2 rounded-xl font-extrabold transition-all cursor-pointer";
         settingsBtn.classList.add("hidden");
-        presetCtrl.classList.add("hidden");
         budgetCtrl.classList.add("hidden");
-        guideBox.className = "lg:col-span-12 toss-card p-4 sm:p-5 flex flex-col justify-between";
+        guideBox.className = "lg:col-span-12 toss-card p-4 sm:p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3.5";
     }
 
     var total = (state.totalBudget !== undefined && state.totalBudget !== null) ? Number(state.totalBudget) : 700000;
@@ -757,50 +710,7 @@ function renderAll() {
     var exhausted = (balance <= 0);
     updateOrderFormLockState(exhausted);
 
-    // 자주 찾는 단골 품목 타일 렌더링
-    var presetBox = document.getElementById("presetContainer");
-    presetBox.innerHTML = "";
-    state.presets.forEach(function(p, idx) {
-        var visual = getCategoryVisual(p.category);
-        var tile = document.createElement("div");
-        tile.className = "relative group rounded-xl p-2.5 flex flex-col items-center justify-center text-center transition transform hover:-translate-y-0.5 cursor-pointer select-none shadow-2xs " + visual.bg;
-
-        tile.innerHTML = '<div class="w-9 h-9 rounded-xl bg-white/85 shadow-2xs flex items-center justify-center text-lg mb-1.5">' + visual.emoji + '</div>'
-            + '<span class="text-[9px] font-extrabold px-1.5 py-0.2 rounded mb-0.5 ' + visual.badgeBg + '">' + visual.label + '</span>'
-            + '<div class="text-[11px] font-black text-slate-900 leading-snug line-clamp-1 break-keep">' + p.name + '</div>';
-
-        tile.onclick = function() {
-            if (isBudgetExhausted) {
-                showToast("🚫 이번 달 예산이 모두 소진되어 다음달에 신청부탁드립니다.");
-                return;
-            }
-            document.getElementById("category").value = p.category || "과자·스낵";
-            document.getElementById("item_name").value = p.name;
-            document.getElementById("link").value = p.link || "";
-            document.getElementById("item_name").focus();
-            showToast("'" + p.name + "' 정보가 신청서에 자동 입력되었습니다!");
-        };
-
-        if (isAdmin) {
-            var delPresetBtn = document.createElement("button");
-            delPresetBtn.type = "button";
-            delPresetBtn.title = "단골 품목 삭제";
-            delPresetBtn.className = "absolute top-1 right-1 w-5 h-5 rounded-full bg-white/80 hover:bg-rose-600 text-slate-500 hover:text-white text-[10px] font-black flex items-center justify-center shadow-2xs transition cursor-pointer";
-            delPresetBtn.innerText = "✕";
-            delPresetBtn.onclick = function(e) {
-                e.stopPropagation();
-                state.presets.splice(idx, 1);
-                renderAll();
-                saveToCloud();
-                showToast("단골 품목에서 삭제되었습니다.");
-            };
-            tile.appendChild(delPresetBtn);
-        }
-
-        presetBox.appendChild(tile);
-    });
-
-    // 신청 · 공감 현황 2열 카드 렌더링
+    // 신청 현황 2열 카드 렌더링
     var sortType = document.getElementById("sortOrder").value;
     var catFilter = document.getElementById("filterCategory").value;
     var listEl = document.getElementById("orderList");
@@ -821,13 +731,15 @@ function renderAll() {
     }
 
     list.forEach(function(o) {
-        var liked = myLikes.indexOf(o.id) !== -1;
         var isPaid = Number(o.price) > 0;
         var visual = getCategoryVisual(o.category);
         var displayDateTime = (o.date && o.date.indexOf(":") !== -1) ? o.date : formatDateTime(o.id);
 
+        // 결제완료(주문완료) 건은 미결제 화이트 카드와 대비되도록 차분한 슬레이트 그레이(회색) 톤으로 변경
         var card = document.createElement("div");
-        card.className = "toss-card p-4 flex flex-col justify-between gap-3 hover:shadow-md transition" + (isPaid ? " ring-1 ring-emerald-200/80" : "");
+        card.className = isPaid
+            ? "rounded-[20px] p-4 flex flex-col justify-between gap-3 bg-slate-200/65 border border-slate-300/90 transition"
+            : "toss-card p-4 flex flex-col justify-between gap-3 border border-transparent hover:shadow-md transition";
 
         var topArea = document.createElement("div");
         topArea.className = "space-y-2";
@@ -836,30 +748,34 @@ function renderAll() {
         itemHeader.className = "flex items-start gap-3";
 
         var thumbWrap = document.createElement("div");
-        thumbWrap.className = "w-11 h-11 rounded-xl " + visual.bg + " flex flex-col items-center justify-center shrink-0 overflow-hidden shadow-2xs select-none";
+        thumbWrap.className = "w-11 h-11 rounded-xl " + (isPaid ? "bg-slate-300/70 grayscale opacity-80" : visual.bg) + " flex flex-col items-center justify-center shrink-0 overflow-hidden shadow-2xs select-none relative";
         thumbWrap.innerHTML = '<span class="text-xl leading-none">' + visual.emoji + '</span>';
 
         var textWrap = document.createElement("div");
         textWrap.className = "flex-1 min-w-0";
 
         var linkTag = (o.link && o.link.indexOf("http") === 0)
-            ? '<a href="' + o.link + '" target="_blank" rel="noopener noreferrer" class="text-[10px] font-extrabold text-teal-700 bg-teal-50 hover:bg-teal-100 px-2 py-0.5 rounded transition">구매링크 ↗</a>'
+            ? '<a href="' + o.link + '" target="_blank" rel="noopener noreferrer" class="text-[10px] font-extrabold ' + (isPaid ? 'text-slate-600 bg-white/80 hover:bg-white border border-slate-300/80' : 'text-teal-700 bg-white/90 hover:bg-teal-100 border border-teal-200/70') + ' px-2 py-0.5 rounded transition">구매링크 ↗</a>'
             : '';
 
         var paidBadge = isPaid
-            ? '<span class="text-[10px] font-extrabold text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded">✅ 결제완료</span>'
+            ? '<span class="text-[10px] font-black text-white bg-slate-600 px-2 py-0.5 rounded-md shadow-2xs">✅ 주문·결제완료</span>'
             : '';
+
+        var catBadgeClass = isPaid
+            ? "text-[10px] font-extrabold text-slate-600 bg-white/75 border border-slate-300/70 px-1.5 py-0.5 rounded"
+            : "text-[10px] font-extrabold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded";
 
         textWrap.innerHTML = '<div class="flex flex-wrap items-center justify-between gap-1 mb-0.5">'
             + '<div class="flex items-center gap-1">'
-            + '<span class="text-[10px] font-extrabold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">' + o.category + '</span>'
+            + '<span class="' + catBadgeClass + '">' + o.category + '</span>'
             + paidBadge
             + '</div>'
             + linkTag
             + '</div>'
-            + '<h3 class="text-sm font-black text-slate-900 leading-snug break-words">' + o.name + '</h3>'
+            + '<h3 class="text-sm font-black ' + (isPaid ? 'text-slate-600' : 'text-slate-900') + ' leading-snug break-words">' + o.name + '</h3>'
             + '<div class="flex flex-wrap items-center gap-1.5 mt-1">'
-            + '<span class="text-[11px] font-bold text-slate-400">' + o.author + ' · ' + displayDateTime + '</span>'
+            + '<span class="text-[11px] font-bold ' + (isPaid ? 'text-slate-500' : 'text-slate-400') + '">' + o.author + ' · ' + displayDateTime + '</span>'
             + '</div>';
 
         itemHeader.appendChild(thumbWrap);
@@ -868,51 +784,40 @@ function renderAll() {
 
         if (o.reqNote) {
             var noteDiv = document.createElement("div");
-            noteDiv.className = "text-[11px] font-bold bg-amber-50 text-amber-900 px-3 py-1.5 rounded-xl";
+            noteDiv.className = isPaid
+                ? "text-[11px] font-bold bg-white/60 text-slate-600 px-3 py-1.5 rounded-xl border border-slate-300/60"
+                : "text-[11px] font-bold bg-amber-50/95 text-amber-900 px-3 py-1.5 rounded-xl border border-amber-200/60";
             noteDiv.innerHTML = "📝 " + o.reqNote;
             topArea.appendChild(noteDiv);
         }
         if (o.adminMemo) {
             var admDiv = document.createElement("div");
-            admDiv.className = "text-[11px] font-extrabold bg-teal-50 text-teal-900 px-3 py-1.5 rounded-xl";
+            admDiv.className = isPaid
+                ? "text-[11px] font-extrabold bg-white/70 text-slate-700 px-3 py-1.5 rounded-xl border border-slate-300/70"
+                : "text-[11px] font-extrabold bg-teal-50 text-teal-900 px-3 py-1.5 rounded-xl border border-teal-200/60";
             admDiv.innerHTML = "📢 담당자 안내: " + o.adminMemo;
             topArea.appendChild(admDiv);
         }
-        // 상단 '✅ 결제완료' 배지와 역할을 분리하여 하단 박스에는 '💳 결제 금액'으로 표기
         if (isPaid) {
             var priceDiv = document.createElement("div");
-            priceDiv.className = "text-[11px] font-extrabold bg-emerald-50 border border-emerald-100 text-emerald-900 px-3 py-1.5 rounded-xl flex justify-between items-center";
-            priceDiv.innerHTML = '<span>💳 결제 금액</span><span class="text-emerald-700 font-black">' + Number(o.price).toLocaleString() + '원</span>';
+            priceDiv.className = "text-[11px] font-extrabold bg-white/80 border border-slate-300/80 text-slate-600 px-3 py-1.5 rounded-xl flex justify-between items-center";
+            priceDiv.innerHTML = '<span>💳 주문 결제 금액</span><span class="text-slate-800 font-black">' + Number(o.price).toLocaleString() + '원</span>';
             topArea.appendChild(priceDiv);
         }
 
-        var bottomArea = document.createElement("div");
-        bottomArea.className = "space-y-2";
-
-        var likeBtn = document.createElement("button");
-        likeBtn.type = "button";
-        likeBtn.className = "w-full py-2 rounded-xl font-black text-xs transition cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs "
-            + (liked ? "dadam-mint-btn text-white" : "bg-[#10B981]/15 hover:bg-[#10B981]/25 text-[#065F46]");
-        likeBtn.innerHTML = '<span>👍 나도 원해요</span><span class="font-black">' + o.likes + '</span>';
-        likeBtn.onclick = function() {
-            var idx = myLikes.indexOf(o.id);
-            if (idx > -1) { myLikes.splice(idx, 1); o.likes = Math.max(0, o.likes - 1); }
-            else { myLikes.push(o.id); o.likes += 1; }
-            renderAll();
-            saveToCloud();
-        };
-        bottomArea.appendChild(likeBtn);
+        card.appendChild(topArea);
 
         if (isAdmin) {
+            var bottomArea = document.createElement("div");
             var adminBar = document.createElement("div");
-            adminBar.className = "pt-2 border-t border-slate-100 flex flex-wrap justify-between items-center gap-1";
+            adminBar.className = "pt-2 border-t " + (isPaid ? "border-slate-300/80" : "border-slate-100") + " flex flex-wrap justify-between items-center gap-1";
 
             var leftBtns = document.createElement("div");
             leftBtns.className = "flex items-center gap-1";
 
             var memoBtn = document.createElement("button");
             memoBtn.type = "button";
-            memoBtn.className = "text-[10px] px-2 py-1 rounded-lg font-extrabold bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer";
+            memoBtn.className = "text-[10px] px-2.5 py-1 rounded-lg font-extrabold bg-white hover:bg-slate-100 text-slate-700 border border-slate-200/80 cursor-pointer";
             memoBtn.innerText = "💬 메모";
             memoBtn.onclick = function() {
                 activeOrderId = o.id;
@@ -922,8 +827,10 @@ function renderAll() {
 
             var priceBtn = document.createElement("button");
             priceBtn.type = "button";
-            priceBtn.className = "text-[10px] px-2 py-1 rounded-lg font-extrabold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 cursor-pointer";
-            priceBtn.innerText = "💰 금액입력";
+            priceBtn.className = isPaid
+                ? "text-[10px] px-2.5 py-1 rounded-lg font-extrabold bg-slate-600 hover:bg-slate-700 text-white cursor-pointer"
+                : "text-[10px] px-2.5 py-1 rounded-lg font-extrabold bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer";
+            priceBtn.innerText = isPaid ? "💰 금액수정" : "💰 결제완료 처리";
             priceBtn.onclick = function() {
                 activeOrderId = o.id;
                 document.getElementById("priceInputModal").value = o.price || "";
@@ -932,24 +839,6 @@ function renderAll() {
 
             leftBtns.appendChild(memoBtn);
             leftBtns.appendChild(priceBtn);
-
-            var rightBtns = document.createElement("div");
-            rightBtns.className = "flex items-center gap-1";
-
-            var presetRegBtn = document.createElement("button");
-            presetRegBtn.type = "button";
-            presetRegBtn.className = "text-[10px] px-2 py-1 rounded-lg font-extrabold text-teal-700 hover:bg-teal-50 cursor-pointer";
-            presetRegBtn.innerText = "+ 단골등록";
-            presetRegBtn.onclick = function() {
-                if (state.presets.some(function(p) { return p.name === o.name; })) {
-                    showToast("이미 단골 품목에 등록되어 있습니다.");
-                    return;
-                }
-                state.presets.push({ name: o.name, category: o.category, link: o.link || "" });
-                renderAll();
-                saveToCloud();
-                showToast("단골 품목으로 등록되었습니다.");
-            };
 
             var delBtn = document.createElement("button");
             delBtn.type = "button";
@@ -962,16 +851,12 @@ function renderAll() {
                 showToast("삭제되었습니다.");
             };
 
-            rightBtns.appendChild(presetRegBtn);
-            rightBtns.appendChild(delBtn);
-
             adminBar.appendChild(leftBtns);
-            adminBar.appendChild(rightBtns);
+            adminBar.appendChild(delBtn);
             bottomArea.appendChild(adminBar);
+            card.appendChild(bottomArea);
         }
 
-        card.appendChild(topArea);
-        card.appendChild(bottomArea);
         listEl.appendChild(card);
     });
 }
@@ -1037,7 +922,6 @@ document.getElementById("orderForm").onsubmit = function(e) {
         date: formatDateTime(nowTs)
     };
     state.orders.unshift(item);
-    myLikes.push(item.id);
     document.getElementById("item_name").value = "";
     document.getElementById("link").value = "";
     document.getElementById("req_note").value = "";
@@ -1094,36 +978,6 @@ document.getElementById("saveMemoBtn").onclick = function() {
         showToast("메모 저장 완료!");
     }
     document.getElementById("memoModal").classList.add("hidden");
-};
-
-// 단골 품목 추가 모달
-document.getElementById("openAddPresetBtn").onclick = function() {
-    document.getElementById("presetCategoryInput").value = document.getElementById("category").value || "과자·스낵";
-    document.getElementById("presetNameInput").value = "";
-    document.getElementById("presetLinkInput").value = "";
-    document.getElementById("presetModal").classList.remove("hidden");
-    document.getElementById("presetNameInput").focus();
-};
-document.getElementById("closePresetBtn").onclick = function() {
-    document.getElementById("presetModal").classList.add("hidden");
-};
-document.getElementById("savePresetBtn").onclick = function() {
-    var nameVal = document.getElementById("presetNameInput").value.trim();
-    if (!nameVal) {
-        showToast("품목명을 입력해주세요.");
-        return;
-    }
-    var catVal = document.getElementById("presetCategoryInput").value;
-    var linkVal = document.getElementById("presetLinkInput").value.trim();
-    state.presets.push({
-        name: nameVal,
-        category: catVal,
-        link: linkVal
-    });
-    document.getElementById("presetModal").classList.add("hidden");
-    renderAll();
-    saveToCloud();
-    showToast("단골 품목이 등록되었습니다!");
 };
 
 // 보드 설정 모달
