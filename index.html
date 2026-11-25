@@ -670,9 +670,11 @@ function updatePublicUsageGauge(spent, total, balance) {
 
 function renderAll() {
     var cleanNotice = (state.notice || "먹고 싶은 간식이나 필요한 비품을 등록해 주세요.")
-        .replace(/거나\s*'나도 원해요'를 눌러주세요\.?/g, "해 주세요.")
+        .replace(/등록하거나\s*'나도 원해요'를 눌러주세요\.?/g, "등록해 주세요.")
+        .replace(/하거나\s*'나도 원해요'를 눌러주세요\.?/g, "해 주세요.")
         .replace(/\(매주 화·목 정기 발주\)/g, "")
         .replace(/자유롭게 신청해 주세요\.?/g, "등록해 주세요.")
+        .replace(/등록하해\s*주세요\.?/g, "등록해 주세요.")
         .trim();
     document.getElementById("headerNoticeText").innerText = cleanNotice;
 
