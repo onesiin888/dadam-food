@@ -793,25 +793,25 @@ function renderAll() {
         if (o.reqNote) {
             var noteDiv = document.createElement("div");
             noteDiv.className = isPaid
-                ? "text-[11px] font-bold bg-slate-300/50 text-slate-600 px-3 py-1.5 rounded-xl"
-                : "text-[11px] font-bold bg-amber-50 text-amber-900 px-3 py-1.5 rounded-xl";
+                ? "text-[11px] font-bold bg-slate-300/50 text-slate-600 px-3 py-1.5 rounded-xl break-all leading-relaxed"
+                : "text-[11px] font-bold bg-amber-50 text-amber-900 px-3 py-1.5 rounded-xl break-all leading-relaxed";
             noteDiv.innerHTML = "📝 " + o.reqNote;
             topArea.appendChild(noteDiv);
         }
         if (o.adminMemo) {
             var admDiv = document.createElement("div");
             admDiv.className = isPaid
-                ? "text-[11px] font-extrabold bg-slate-300/60 text-slate-700 px-3 py-1.5 rounded-xl"
-                : "text-[11px] font-extrabold bg-teal-50 text-teal-900 px-3 py-1.5 rounded-xl";
+                ? "text-[11px] font-extrabold bg-slate-300/60 text-slate-700 px-3 py-1.5 rounded-xl break-all leading-relaxed"
+                : "text-[11px] font-extrabold bg-teal-50 text-teal-900 px-3 py-1.5 rounded-xl break-all leading-relaxed";
             admDiv.innerHTML = "📢 담당자 안내: " + o.adminMemo;
             topArea.appendChild(admDiv);
         }
 
         card.appendChild(topArea);
 
-        // 하단 상태 푸터 바 (카드 높이를 동일하게 유지하면서 빈 여백 해소)
+        // 하단 상태 푸터 바 (카드 높이를 동일하게 유지하면서 맨 아래 바닥에 고정)
         var bottomArea = document.createElement("div");
-        bottomArea.className = "space-y-2 pt-2 border-t " + (isPaid ? "border-slate-300/80" : "border-slate-100");
+        bottomArea.className = "mt-auto space-y-2 pt-2 border-t " + (isPaid ? "border-slate-300/80" : "border-slate-100");
 
         var statusFooter = document.createElement("div");
         if (isPaid) {
